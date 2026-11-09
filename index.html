@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Written Test – Comprehensive Exam Simulator · Prof. Cruz Raúl García Coronado</title>
+<style>
+:root{--ink:#14248f;--red:#e0144c;--hand:"Ink Free","Segoe Print","Bradley Hand","Comic Sans MS","Chalkboard SE",cursive;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Calibri,"Helvetica Neue",Helvetica,sans-serif;color:#000;min-height:100vh;
+  background-color:#4b2f1c;
+  background-image:
+    repeating-linear-gradient(92deg,rgba(0,0,0,.10) 0 2px,transparent 2px 23px),
+    repeating-linear-gradient(88deg,rgba(255,220,170,.05) 0 1px,transparent 1px 11px),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.12) 0 60px,rgba(255,255,255,.03) 60px 140px,rgba(0,0,0,.06) 140px 230px),
+    linear-gradient(180deg,#5a3820,#3e2716);
+  background-attachment:fixed;}
+/* ---------- TOOLBAR ---------- */
+:root{--tb:112px}
+.toolbar{position:sticky;top:0;z-index:50;background:#171a21;color:#fff;border-bottom:1px solid #000;box-shadow:0 4px 18px rgba(0,0,0,.55);font-family:"Segoe UI",Arial,sans-serif}
+.tb-row{max-width:1180px;margin:0 auto;padding:7px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px}
+.tb-top{justify-content:space-between;border-bottom:1px solid #2a2f3a}
+.tb-brand{font-weight:700;font-size:16px;letter-spacing:.2px}
+.tb-brand span{font-weight:400;font-size:12.5px;color:#9aa4b8;margin-left:10px}
+.tb-tabs{display:flex;gap:4px;background:#0e1014;padding:3px;border-radius:10px}
+.tb-tabs .tab{font:600 14px/1 "Segoe UI",Arial,sans-serif;color:#c3cad8;background:transparent;border:0;border-radius:8px;padding:9px 20px;cursor:pointer}
+.tb-tabs .tab:hover{background:#242936;color:#fff}
+.tb-tabs .tab.active{background:#fff;color:#14248f}
+.tb-badges{display:flex;gap:6px}
+.badge{font:12px "Segoe UI",Arial,sans-serif;color:#d5dae6;background:#232834;border:1px solid #3a4152;border-radius:999px;padding:5px 11px}
+.tb-tools{justify-content:flex-start}
+.tb-group{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.tb-group + .tb-group{padding-left:16px;border-left:1px solid #343a48}
+.btn{font:600 13px/1 "Segoe UI",Arial,sans-serif;color:#fff;background:#2b303c;border:1px solid #4a5163;border-radius:8px;padding:9px 11px;cursor:pointer;transition:background .15s}
+.btn:hover{background:#3b4252}
+.btn.primary{background:#5b3fb5;border-color:#7d63d6}
+.btn.primary:hover{background:#6c4fc9}
+.btn.success{background:#17803f;border-color:#2aa65a}
+.btn.success:hover{background:#1d9a4b}
+.btn.on{background:#e8c13a;border-color:#e8c13a;color:#1b1b1b}
+.btn:focus-visible,.tab:focus-visible,.toolbar select:focus-visible{outline:2px solid #ffd54f;outline-offset:2px}
+.field{display:flex;align-items:center;gap:6px;font:600 12.5px "Segoe UI",Arial,sans-serif;color:#c3cad8}
+.toolbar select{font:13.5px "Segoe UI",Arial,sans-serif;padding:8px 8px;border-radius:8px;background:#0e1014;color:#fff;border:1px solid #4a5163;max-width:190px;cursor:pointer}
+@media (max-width:760px){.tb-group + .tb-group{padding-left:0;border-left:0}.tb-brand span{display:none}.btn{padding:9px 11px}}
+.sec{scroll-margin-top:calc(var(--tb) + 12px)}
+.sec.flash .sec-h{background:#fff3b0;transition:background .3s}
+.name-input{border:0;border-bottom:1px solid #000;border-radius:0;background:transparent;font:inherit;font-weight:bold;padding:0 5px;text-align:center;outline:none;min-width:12ch}
+.name-input:hover{background:#f4f6ff}
+.name-input:focus{background:#fff8d6}
+@media print{.name-input{background:none!important}}
+
+#today{white-space:nowrap}
+.inst-text .t2{white-space:nowrap}
+#filter{max-width:230px}
+
+/* ---------- STUDY MAP ---------- */
+main.hidden{display:none}
+#study{max-width:1180px;margin:0 auto;padding:24px 14px 60px;font-family:Arial,Calibri,"Helvetica Neue",Helvetica,sans-serif}
+.st-intro{color:#f3e7d8;margin:0 4px 16px;font-size:15px;line-height:1.5}
+.st-intro b{color:#fff}
+.st-layout{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+.st-map{background:#fff;border-radius:10px;padding:14px 14px 8px;box-shadow:0 10px 28px rgba(0,0,0,.45);position:sticky;top:calc(var(--tb) + 14px);max-height:calc(100vh - var(--tb) - 28px);overflow:auto}
+.st-map h2{margin:0 0 10px;font-size:15px;color:#14248f}
+.lane{border-top:1px solid #d9dcea;padding:9px 0 10px}
+.lane:first-of-type{border-top:0}
+.lane-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.lane-h b{font-size:12px;text-transform:uppercase;letter-spacing:.7px;color:#444}
+.lane-h span{font-size:11.5px;color:#777}
+.nodes{display:flex;flex-direction:column;gap:6px}
+.node{text-align:left;font:inherit;background:#f3f5ff;border:1.5px solid #c9d1ff;border-radius:9px;padding:9px 12px;cursor:pointer;color:#14248f;display:flex;flex-direction:column;gap:2px}
+.node b{font-size:14px}
+.node small{font-size:12px;color:#555}
+.node:hover{background:#e6eaff;border-color:#8c9bff}
+.node.active{background:#14248f;border-color:#14248f;color:#fff}
+.node.active small{color:#cdd4ff}
+.node:focus-visible,.st-btn:focus-visible,.chip-btn:focus-visible{outline:2px solid #e0144c;outline-offset:2px}
+.st-detail{background:#fff;border-radius:10px;padding:26px 32px 30px;box-shadow:0 10px 28px rgba(0,0,0,.45);font-size:15px;line-height:1.55;color:#111;min-height:520px}
+.st-detail h1{margin:0;font-size:26px;color:#14248f}
+.st-detail .sub{margin:2px 0 14px;color:#555;font-size:15px}
+.st-detail h3{margin:20px 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.6px;color:#14248f;border-bottom:2px solid #dfe3ff;padding-bottom:3px}
+.st-detail ul{margin:0;padding-left:20px}
+.st-detail li{margin:3px 0}
+.st-detail code,.st-detail .pat{background:#eef0ff;border-radius:4px;padding:1px 6px;font-family:Consolas,"Courier New",monospace;font-size:13.5px}
+.st-table{width:100%;border-collapse:collapse;font-size:14px;margin:4px 0}
+.st-table th,.st-table td{border:1px solid #c9cde0;padding:6px 9px;text-align:left;vertical-align:top}
+.st-table th{background:#eef0ff;color:#14248f}
+.st-table td.c{text-align:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:#fff6dc;border:1px solid #ecd48a;border-radius:999px;padding:3px 11px;font-size:13.5px}
+.chip i{color:#777;font-style:normal;font-size:12.5px}
+.ex{list-style:none;padding:0!important}
+.ex li{border-left:4px solid #14248f;background:#f7f8ff;padding:6px 12px;margin:5px 0;border-radius:0 6px 6px 0}
+.ex li i{display:block;color:#666;font-style:normal;font-size:13px}
+.bad-row{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin:6px 0;padding:8px 12px;border:1px solid #f1c5d1;background:#fff5f8;border-radius:8px}
+.bad-row .w{color:#c0103f;text-decoration:line-through}
+.bad-row .r{color:#0a7a4d;font-weight:bold}
+.bad-row .why{grid-column:1/-1;font-size:13.5px;color:#444}
+.tip{background:#fff8d6;border:1px solid #ecd48a;border-radius:8px;padding:9px 13px;margin:12px 0}
+.tl{margin:10px 0 4px}
+.tl-bar{position:relative;height:16px;border-radius:8px;background:linear-gradient(90deg,#e9ecf9 0 50%,#f4f4f4 50% 100%);border:1px solid #c9cde0}
+.tl-seg{position:absolute;top:2px;bottom:2px;border-radius:6px;background:#14248f}
+.tl-seg.fade{background:linear-gradient(90deg,#9fa9f0,#14248f)}
+.tl-x{position:absolute;top:-4px;width:6px;height:22px;background:#e0144c;border-radius:3px}
+.tl-now{position:absolute;left:50%;top:-5px;width:2px;height:24px;background:#000}
+.tl-lab{display:flex;justify-content:space-between;font-size:12px;color:#555;margin-top:3px}
+.tl-cap{font-size:13.5px;color:#333;margin:2px 0 0}
+.st-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;padding-top:16px;border-top:1px solid #d9dcea}
+.st-btn{font:600 14px Arial,sans-serif;background:#fff;color:#14248f;border:1.5px solid #14248f;border-radius:8px;padding:10px 16px;cursor:pointer}
+.st-btn:hover{background:#eef0ff}
+.st-btn.main{background:#14248f;color:#fff}
+.st-btn.main:hover{background:#1d34c0}
+.chip-btn{font:600 13px Arial,sans-serif;background:#eef0ff;border:1px solid #c9d1ff;border-radius:7px;padding:6px 12px;cursor:pointer;color:#14248f;margin:6px 0}
+@media (max-width:900px){
+  .st-layout{grid-template-columns:1fr}
+  .st-map{position:static;max-height:none}
+  .nodes{flex-direction:row;flex-wrap:wrap}
+  .st-detail{padding:20px 16px}
+  .bad-row{grid-template-columns:1fr}
+}
+@media print{#study{display:none!important}}
+
+/* ---------- PAGES ---------- */
+main{padding:28px 10px 60px}
+.page{width:8.5in;min-height:11in;margin:0 auto 34px;background:#fff;position:relative;padding:.62in .72in .8in .82in;
+  box-shadow:0 2px 4px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.55);font-size:10.5pt;line-height:1.5}
+.page.compact{min-height:0}
+.page.hidden,.sec.hidden{display:none}
+.run-head{position:absolute;top:.3in;left:.82in;right:.72in;display:flex;justify-content:space-between;font-size:8pt;color:#666;border-bottom:1px solid #ccc}
+.page-footer{position:absolute;left:.82in;right:.72in;bottom:.35in;display:flex;justify-content:space-between;font-size:8pt;color:#555;border-top:1px solid #bbb;padding-top:3px}
+.page.compact .page-footer{position:static;margin-top:24px}
+/* ---------- HEADER ---------- */
+.inst-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.inst-text{flex:1;text-align:center}
+.inst-text .t1{font-weight:bold;font-size:13.5pt;margin-bottom:5px}
+.inst-text .t2{font-size:10pt;margin:4px 0}
+.fill{border-bottom:1px solid #000;padding:0 5px;font-weight:bold}
+.dbl{border:none;border-top:4px double #000;margin:8px 0 4px}
+.grade-top{position:absolute;top:.06in;right:.5in;font-family:var(--hand);color:var(--red);font-size:25px;font-weight:bold;transform:rotate(-3deg);display:none;text-align:right;line-height:1.05;z-index:3}
+.grade-top small{display:block;font-size:12.5px;font-weight:normal}
+body.graded-on .grade-top{display:block}
+/* ---------- SECTIONS ---------- */
+.sec{margin:12px 0 4px}
+.sec-h{font-weight:bold;position:relative;margin:0 0 6px}
+.sub-h{font-weight:bold;margin:8px 0 4px}
+.instr{margin:4px 0}
+.example{margin:2px 0 6px 22px}
+.sec-score{position:absolute;right:-.66in;top:-12px;width:52px;height:52px;border:2.5px solid var(--red);border-radius:50%;display:none;align-items:center;justify-content:center;font-family:var(--hand);color:var(--red);font-weight:bold;font-size:15px;transform:rotate(-8deg);background:rgba(255,255,255,.75);z-index:2}
+body.graded-on .sec-score{display:flex}
+.mode-tag{display:inline-block;font:bold 8.5pt Arial;border:1px solid #000;padding:1px 6px;margin:0 0 4px}
+.item{position:relative;margin:3px 0}
+.n{display:inline-block;min-width:20px}
+.row2{display:grid;grid-template-columns:47% 53%;column-gap:12px;align-items:end}
+.row2 .a{display:flex;gap:6px;align-items:baseline}
+.lead{font-weight:normal;white-space:nowrap}
+.line{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:8px}
+.line>.txt{flex:1}
+.line>.fb,.line>.key{flex-basis:100%}
+.vb{font-weight:bold;white-space:nowrap}
+input.blank{font:inherit;color:var(--ink);background:transparent;border:0;border-bottom:1px solid #000;border-radius:0;padding:0 4px;height:1.45em;outline:none;text-align:center;min-width:30px}
+input.full,input.grow{text-align:left}
+input.full{width:100%}
+input.grow{flex:1}
+.open input.full{margin-left:22px;width:calc(100% - 22px)}
+input.blank:focus{background:#fff8d6}
+input.blank.bad,.cblank.bad{border-bottom:2px solid var(--red)}
+.mark{position:absolute;left:-.46in;top:-.3em;font-family:var(--hand);font-weight:bold;color:var(--red);font-size:23px;display:none;line-height:1}
+.ded{position:absolute;left:-.48in;top:1.15em;font-family:var(--hand);color:var(--red);font-size:11.5px;display:none;font-weight:bold}
+.item.graded>.mark{display:block}
+.item.graded.wrong>.ded{display:block}
+.fb{grid-column:1/-1;display:none;font-family:var(--hand);color:var(--red);font-size:13.5px;line-height:1.3;margin:1px 0 4px 22px}
+.item.graded.wrong>.fb{display:block}
+.fb .ans{font-weight:bold}
+
+.fb .rule{font-size:12.5px}
+.key{grid-column:1/-1;display:none;font-size:9pt;color:#0a7a4d;margin:0 0 3px 22px;font-style:italic}
+body.show-key .key{display:block}
+/* choices */
+.cblank{display:inline-block;border-bottom:1px solid #000;text-align:center;color:var(--ink);padding:0 4px;min-height:1.3em;vertical-align:bottom;line-height:1.3}
+.opts{white-space:nowrap}
+.opt{font:inherit;background:none;border:2px solid transparent;border-radius:50%;padding:0 5px;cursor:pointer;color:#000;line-height:1.25}
+.opt:hover{border-color:#c9d1ff}
+.opt.sel{border-color:var(--ink);color:var(--ink)}
+.opts-line{margin:1px 0 3px 26px}
+.wordbank{text-align:center;font-weight:bold;border:1px solid #000;padding:4px;margin:2px auto 8px;width:72%;letter-spacing:.4px}
+.reading{border:1px solid #000;padding:7px 10px;margin:4px 0 6px;text-align:justify;background:#fcfcfc}
+/* tables */
+table.chart{width:100%;border-collapse:collapse;margin:4px 0 8px;font-size:10pt}
+.chart th,.chart td{border:1px solid #000;padding:2px 6px;height:25px;text-align:center;position:relative;vertical-align:middle}
+.chart th{background:#efefef}
+.chart td.inf{text-align:left;font-weight:bold}
+.chart tr.example td{font-style:italic;background:#f7f7f7}
+.chart td.cell input{width:100%;border:0;text-align:center}
+.cell .cn{position:absolute;left:3px;top:1px;font-size:7.5pt;color:#555}
+.chart td.cell .mark{left:auto;right:1px;top:-5px;font-size:17px}
+.chart td.cell .ded{display:none!important}
+.chart td.cell .fb{margin:0;font-size:11.5px;text-align:center}
+.chart td.cell .key{margin:0;text-align:center}
+.vt td,.vt th{height:27px}
+.sec-notes{display:none;font-family:var(--hand);color:var(--red);font-size:13px;border:1.5px dashed var(--red);border-radius:6px;padding:6px 10px;margin:6px 0;line-height:1.35}
+.sec-notes.on{display:block}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(140px);background:#222;color:#fff;padding:12px 18px;border-radius:10px;font:14px "Segoe UI",Arial;transition:.3s;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.5);max-width:90vw;text-align:center}
+#toast.on{transform:translateX(-50%) translateY(0)}
+@media (max-width:860px){.page{width:100%;min-height:auto;padding:40px 18px 60px 46px}.sec-score{right:-12px}.row2{grid-template-columns:1fr}}
+@media print{
+  @page{size:letter;margin:0}
+  body{background:none!important}
+  main{padding:0}
+  .toolbar,#toast{display:none!important}
+  .page{box-shadow:none;margin:0;width:8.5in;min-height:10.95in;break-after:page;page-break-after:always}
+  .page:last-of-type{break-after:auto;page-break-after:auto}
+  input.blank:focus{background:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
+/* ---------- PAGE LAYOUT: margenes + espaciado repartido por renglon ---------- */
+.page{--ix:0px}
+@media (min-width:861px){
+  .page{padding-top:.9in;padding-bottom:1in}
+}
+@media print{
+  .page{padding-top:.9in;padding-bottom:1in}
+}
+.sec{display:flow-root;margin-top:calc(12px + 2 * var(--ix));margin-bottom:0}
+.page > .sec:first-child,.page > .run-head + .sec{margin-top:0}
+.sec > .item{margin-bottom:calc(3px + var(--ix))}
+.chart th,.chart td{height:calc(25px + var(--ix))}
+.vt td,.vt th{height:calc(27px + var(--ix))}
+</style>
+</head>
+<body>
+<header class="toolbar" id="toolbar">
+  <div class="tb-row tb-top">
+    <div class="tb-brand">Exam Simulator<span>English 311B &middot; Prof. Cruz Ra&uacute;l Garc&iacute;a Coronado</span></div>
+    <nav class="tb-tabs" aria-label="Vista">
+      <button type="button" id="tabExam" class="tab active">Examen</button>
+      <button type="button" id="tabStudy" class="tab">Mapa de estudio</button>
+    </nav>
+    <div class="tb-badges">
+      <span class="badge" id="badgeExam"></span>
+      <span class="badge" id="badgeVerbs"></span>
+    </div>
+  </div>
+  <div class="tb-row tb-tools" id="examTools">
+    <div class="tb-group">
+      <button id="btnGen" class="btn primary" type="button">Nuevo examen</button>
+      <button id="btnGrade" class="btn success" type="button">Calificar</button>
+      <button id="btnKey" class="btn" type="button">Ver respuestas</button>
+      <button id="btnClear" class="btn" type="button">Borrar respuestas</button>
+      <button id="btnPrint" class="btn" type="button">Imprimir / PDF</button>
+    </div>
+    <div class="tb-group">
+      <label class="field">Mostrar<select id="filter"></select></label>
+      <label class="field">Tabla de verbos
+        <select id="verbMode">
+          <option value="prof20">20 verbos del profe</option>
+          <option value="random60">20 al azar (de 60)</option>
+        </select>
+      </label>
+    </div>
+  </div>
+</header>
+
+<div id="secHolder" hidden>
+<div id="pageHead" style="display:contents"><div id="grade" class="grade-top"></div>
+    <div class="inst-head">
+      <div class="crest">
+        <svg viewBox="0 0 100 120" width="74" height="88" aria-label="Escudo escolar">
+          <path d="M50 4 L94 18 V58 C94 88 72 106 50 116 C28 106 6 88 6 58 V18 Z" fill="#fff" stroke="#000" stroke-width="3"/>
+          <path d="M50 12 L86 23 V58 C86 83 68 98 50 107 C32 98 14 83 14 58 V23 Z" fill="none" stroke="#000" stroke-width="1.2"/>
+          <line x1="14" y1="54" x2="86" y2="54" stroke="#000" stroke-width="1.2"/>
+          <polygon points="50,22 53.5,31.5 63.5,31.5 55.5,37.5 58.5,47 50,41.5 41.5,47 44.5,37.5 36.5,31.5 46.5,31.5" fill="#000"/>
+          <path d="M26 68 Q38 62 50 68 Q62 62 74 68 V86 Q62 80 50 86 Q38 80 26 86 Z" fill="none" stroke="#000" stroke-width="2"/>
+          <line x1="50" y1="68" x2="50" y2="86" stroke="#000" stroke-width="1.5"/>
+          <text x="50" y="99" font-size="7" font-family="Georgia,serif" text-anchor="middle" font-weight="bold">SCIENTIA</text>
+        </svg>
+      </div>
+      <div class="inst-text">
+        <div class="t1">Written Test - Comprehensive Exam Simulator</div>
+        <div class="t2">Student's name: <input id="studentName" class="fill name-input" type="text" value="Irving Alexis Dominguez Villa" autocomplete="off" spellcheck="false" aria-label="Student's name"> &nbsp; DATE: <span class="fill" id="today"></span></div>
+        <div class="t2">English Group: <span class="fill">311B</span> &nbsp; Professor: <span class="fill">Cruz Raúl García Coronado</span></div>
+      </div>
+      <div class="crest">
+        <svg viewBox="0 0 100 100" width="84" height="84" aria-label="Sello del departamento">
+          <defs>
+            <path id="arcTop" d="M 13 50 A 37 37 0 0 1 87 50"/>
+            <path id="arcBot" d="M 8 50 A 42 42 0 0 0 92 50"/>
+          </defs>
+          <circle cx="50" cy="50" r="47" fill="#fff" stroke="#000" stroke-width="3"/>
+          <circle cx="50" cy="50" r="33" fill="none" stroke="#000" stroke-width="1.2"/>
+          <text font-size="8.5" font-weight="bold" font-family="Arial" letter-spacing="1"><textPath href="#arcTop" startOffset="50%" text-anchor="middle">ENGLISH DEPARTMENT</textPath></text>
+          <text font-size="7.5" font-family="Arial"><textPath href="#arcBot" startOffset="50%" text-anchor="middle">GROUP 311B</textPath></text>
+          <text x="50" y="58" text-anchor="middle" font-size="22" font-weight="bold" font-family="Georgia,serif">EN</text>
+        </svg>
+      </div>
+    </div>
+    <hr class="dbl">
+    </div>
+<div class="sec" id="sec-I"></div>
+<div class="sec" id="sec-II"></div>
+<div class="sec" id="sec-III"></div>
+<div class="sec" id="sec-IV"></div>
+<div class="sec" id="sec-V"></div>
+<div class="sec" id="sec-VI"></div>
+<div class="sec" id="sec-VII"></div>
+<div class="sec" id="sec-VIII"></div>
+<div class="sec" id="sec-IX"></div>
+<div class="sec" id="sec-X"></div>
+<div class="sec" id="sec-XI"></div>
+<div class="sec" id="sec-XII"></div>
+<div class="sec" id="sec-XIII"></div>
+<div class="sec" id="sec-XIV"></div>
+</div>
+<main id="exam"></main>
+
+<main id="study" class="hidden" aria-label="Mapa de estudio">
+  <p class="st-intro"><b>Mapa de estudio.</b> Elige un tema del temario para ver para qu&eacute; se usa, c&oacute;mo se forma, las palabras clave y los errores m&aacute;s comunes. Al final de cada tema puedes saltar a la p&aacute;gina del examen para practicarlo.</p>
+  <div class="st-layout">
+    <aside class="st-map" id="stMap" aria-label="Temas"></aside>
+    <article class="st-detail" id="stDetail" tabindex="-1"></article>
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<script>
+const BANK = {
+  secI: [
+    { q: "She are 16 years old.", a: ["She is 16 years old", "She's 16 years old", "She is sixteen years old"], rule: "Para tercera persona singular (He/She/It) el verbo To Be en presente es 'is', nunca 'are'." },
+    { q: "We am at home now.", a: ["We are at home now", "We're at home now"], rule: "El pronombre 'We' utiliza 'are', mientras que 'am' es exclusivo para 'I'." },
+    { q: "When are you born?", a: ["When were you born?"], rule: "Nacer (to be born) ocurrió en el pasado; con 'you' se usa el pasado 'were', no 'are'." },
+    { q: "I am born in South Africa.", a: ["I was born in South Africa"], rule: "Para hablar del nacimiento en primera persona se usa el pasado del verbo To Be: 'I was born'." },
+    { q: "He don't like pizza.", a: ["He doesn't like pizza", "He does not like pizza"], rule: "En Present Simple negativo, He/She/It llevan el auxiliar 'doesn't' (does not), no 'don't'." },
+    { q: "Does she works here?", a: ["Does she work here?"], rule: "Cuando usas el auxiliar 'Does' en pregunta, el verbo principal pierde la '-s' y va en forma base ('work')." },
+    { q: "They doesn't speak French.", a: ["They don't speak French", "They do not speak French"], rule: "El pronombre plural 'They' usa el auxiliar negativo 'don't' (do not), nunca 'doesn't'." },
+    { q: "My brother have a new car.", a: ["My brother has a new car"], rule: "En tercera persona singular (My brother = He), el verbo 'have' cambia irregularmente a 'has'." },
+    { q: "Where do your sister live?", a: ["Where does your sister live?"], rule: "'Your sister' es tercera persona singular (She), por lo que requiere el auxiliar 'does'." },
+    { q: "She study English every day.", a: ["She studies English every day"], rule: "En 3ª persona singular, los verbos terminados en consonante + 'y' cambian la 'y' por '-ies' (studies)." },
+    { q: "You was at the party last night.", a: ["You were at the party last night"], rule: "En Past Simple del verbo To Be, el pronombre 'You' siempre usa 'were', nunca 'was'." },
+    { q: "He goes not to school on Sundays.", a: ["He doesn't go to school on Sundays", "He does not go to school on Sundays"], rule: "Para negar en Present Simple necesitas el auxiliar 'doesn't / does not' + verbo en forma base ('go')." },
+    { q: "Do he play soccer on weekends?", a: ["Does he play soccer on weekends?"], rule: "Las preguntas con 'he' en Present Simple inician con el auxiliar 'Does', no 'Do'." },
+    { q: "My parents is very happy today.", a: ["My parents are very happy today"], rule: "'My parents' es plural (They), por lo que le corresponde 'are' en lugar de 'is'." },
+    { q: "Anna watchs TV in the evening.", a: ["Anna watches TV in the evening"], rule: "Los verbos terminados en -ch, -sh, -s, -x, -o agregan '-es' en 3ª persona singular (watches)." },
+    { q: "Where was they yesterday morning?", a: ["Where were they yesterday morning?"], rule: "Con sujetos plurales como 'they', el pasado de To Be es 'were', no 'was'." },
+    { q: "I doesn't drink coffee at night.", a: ["I don't drink coffee at night", "I do not drink coffee at night"], rule: "Con el pronombre 'I' el auxiliar negativo correcto es 'don't' (do not)." },
+    { q: "Does your friends live near here?", a: ["Do your friends live near here?"], rule: "'Your friends' es plural (They), por lo tanto la pregunta debe usar el auxiliar 'Do'." },
+    { q: "Tom and I am in the same group.", a: ["Tom and I are in the same group"], rule: "'Tom and I' equivale a 'We' (plural), así que el verbo To Be correcto es 'are'." },
+    { q: "She don't has any brothers.", a: ["She doesn't have any brothers", "She does not have any brothers"], rule: "En tercera persona negativa se usa 'doesn't' seguido del verbo en forma base 'have' (nunca 'has')." }
+  ],
+  secII: [
+    { q: "I don't relax during the day.", lead: "She", a: ["doesn't relax during the day", "does not relax during the day"], rule: "Cambia 'don't' por 'doesn't' para tercera persona (She)." },
+    { q: "I start work at 09:00.", lead: "Anna", a: ["starts work at 09:00", "starts work at 9:00"], rule: "Agrega '-s' al verbo en tercera persona afirmativa: 'starts'." },
+    { q: "I study English at night.", lead: "He", a: ["studies English at night"], rule: "Verbo terminado en consonante + 'y' (study) cambia a '-ies' (studies) con He/She." },
+    { q: "I have lunch at 12:30.", lead: "John", a: ["has lunch at 12:30"], rule: "El verbo 'have' cambia a 'has' en tercera persona singular." },
+    { q: "I finish work at 6:00.", lead: "She", a: ["finishes work at 6:00", "finishes work at 06:00"], rule: "Los verbos terminados en '-sh' agregan '-es' en tercera persona: 'finishes'." },
+    { q: "I watch TV in the evening.", lead: "Anna", a: ["watches TV in the evening"], rule: "Los verbos terminados en '-ch' agregan '-es' en tercera persona: 'watches'." },
+    { q: "I visit my parents on Sundays.", lead: "John", a: ["visits his parents on Sundays"], rule: "¡Cuidado! Además de agregar '-s' (visits), debes cambiar el posesivo 'my' por 'his' (de él)." },
+    { q: "I wash my car every Saturday.", lead: "Anna", a: ["washes her car every Saturday"], rule: "¡Doble cambio! Agrega '-es' (washes) y cambia el posesivo 'my' por 'her' (de ella)." },
+    { q: "I don't do my homework in the morning.", lead: "He", a: ["doesn't do his homework in the morning", "does not do his homework in the morning"], rule: "Usa 'doesn't do' y recuerda cambiar el posesivo 'my' por 'his'." },
+    { q: "I go to my office by bus.", lead: "She", a: ["goes to her office by bus"], rule: "'go' cambia a 'goes' y el posesivo 'my' debe cambiar a 'her'." },
+    { q: "I carry my laptop in a backpack.", lead: "John", a: ["carries his laptop in a backpack"], rule: "'carry' cambia a 'carries' (consonante + y -> ies) y 'my' cambia a 'his'." },
+    { q: "I don't drink coffee with my breakfast.", lead: "Anna", a: ["doesn't drink coffee with her breakfast", "does not drink coffee with her breakfast"], rule: "Usa el auxiliar 'doesn't' y cambia el posesivo 'my' por 'her'." },
+    { q: "I teach math to my students.", lead: "He", a: ["teaches math to his students"], rule: "'teach' agrega '-es' (teaches) y 'my' cambia a 'his'." },
+    { q: "I clean my room on Fridays.", lead: "She", a: ["cleans her room on Fridays"], rule: "Agrega '-s' (cleans) y cambia 'my' por 'her'." },
+    { q: "I play tennis with my friends.", lead: "John", a: ["plays tennis with his friends"], rule: "'play' lleva vocal antes de 'y', solo agrega '-s' (plays), y 'my' cambia a 'his'." },
+    { q: "I don't like my noisy neighbors.", lead: "Anna", a: ["doesn't like her noisy neighbors", "does not like her noisy neighbors"], rule: "Cambia 'don't' a 'doesn't' y el adjetivo posesivo 'my' a 'her'." },
+    { q: "I fix my bike in the garage.", lead: "He", a: ["fixes his bike in the garage"], rule: "Los verbos terminados en '-x' agregan '-es' (fixes) y 'my' cambia a 'his'." },
+    { q: "I brush my teeth three times a day.", lead: "She", a: ["brushes her teeth three times a day"], rule: "'brush' cambia a 'brushes' (-sh + es) y 'my' cambia a 'her'." }
+  ],
+  secIII: [
+    { q: "Their friends don't work on the weekend.", a: ["Their friends work on the weekend"], rule: "Al pasar a afirmativo con sujeto plural (Their friends), quita 'don't' y deja el verbo en forma base ('work')." },
+    { q: "His girlfriend Suzanne doesn't work every day.", a: ["His girlfriend Suzanne works every day"], rule: "Al quitar 'doesn't' en tercera persona singular (Suzanne), el verbo debe llevar '-s' ('works')." },
+    { q: "John works every day.", a: ["John doesn't work every day", "John does not work every day"], rule: "En negativo de 3ª persona usa 'doesn't' y quita la '-s' del verbo principal ('work')." },
+    { q: "My brother studies architecture at university.", a: ["My brother doesn't study architecture at university", "My brother does not study architecture at university"], rule: "Usa 'doesn't' y regresa el verbo 'studies' a su forma base 'study'." },
+    { q: "We don't live in a big apartment.", a: ["We live in a big apartment"], rule: "Para pasar a afirmativo con 'We', elimina 'don't' y conserva el verbo base 'live'." },
+    { q: "Alice has two brothers and one sister.", a: ["Alice doesn't have two brothers and one sister", "Alice does not have two brothers and one sister"], rule: "¡Clásico error de examen! El negativo de 'has' es 'doesn't have' (nunca 'doesn't has')." },
+    { q: "They play basketball on Tuesday afternoons.", a: ["They don't play basketball on Tuesday afternoons", "They do not play basketball on Tuesday afternoons"], rule: "Con el pronombre plural 'They', agrega 'don't' antes del verbo base." },
+    { q: "Mr. Garcia doesn't teach French on Mondays.", a: ["Mr. Garcia teaches French on Mondays"], rule: "Al pasar a afirmativo en 3ª persona, quita 'doesn't' y agrega '-es' a 'teach' -> 'teaches'." },
+    { q: "She goes to the gym before work.", a: ["She doesn't go to the gym before work", "She does not go to the gym before work"], rule: "Con 'She', usa 'doesn't' y regresa 'goes' a su forma base 'go'." },
+    { q: "You don't need a dictionary for this class.", a: ["You need a dictionary for this class"], rule: "Elimina el auxiliar negativo 'don't' y deja el verbo en forma base 'need'." },
+    { q: "The museum opens at ten o'clock.", a: ["The museum doesn't open at ten o'clock", "The museum does not open at ten o'clock"], rule: "'The museum' (It) niega con 'doesn't' + verbo base sin '-s' ('open')." },
+    { q: "My parents don't watch TV at night.", a: ["My parents watch TV at night"], rule: "'My parents' es plural; quita 'don't' y deja el verbo en forma base 'watch'." },
+    { q: "David doesn't have a motorcycle.", a: ["David has a motorcycle"], rule: "Al pasar a afirmativo en 3ª persona singular (David), 'doesn't have' se convierte en 'has'." },
+    { q: "I drink soda with my meals.", a: ["I don't drink soda with my meals", "I do not drink soda with my meals"], rule: "Para negar con 'I' en Present Simple, coloca 'don't' antes del verbo." },
+    { q: "Our dog doesn't bark at strangers.", a: ["Our dog barks at strangers"], rule: "'Our dog' (It) es 3ª persona; al pasar a afirmativo agrega '-s' al verbo ('barks')." },
+    { q: "The students understand the grammar rules.", a: ["The students don't understand the grammar rules", "The students do not understand the grammar rules"], rule: "'The students' (They) es plural; usa 'don't' + verbo en forma base." },
+    { q: "Laura watches horror movies at night.", a: ["Laura doesn't watch horror movies at night", "Laura does not watch horror movies at night"], rule: "Niega con 'doesn't' y quita '-es' del verbo ('watch')." },
+    { q: "He doesn't do his laundry on Sundays.", a: ["He does his laundry on Sundays"], rule: "Al quitar 'doesn't', el verbo principal 'do' debe conjugarse en 3ª persona: 'does'." }
+  ],
+  secIV_rows: [
+    ["I", "me", "my", "mine"],
+    ["You", "you", "your", "yours"],
+    ["He", "him", "his", "his"],
+    ["She", "her", "her", "hers"],
+    ["It", "it", "its", "its"],
+    ["We", "us", "our", "ours"],
+    ["You (plural)", "you", "your", "yours"],
+    ["They", "them", "their", "theirs"]
+  ],
+  secIV_B: [
+    { s: ["This is not my car, it is ", "."], opts: ["her", "hers", "she"], a: "hers", rule: "Al final de la oración sin sustantivo después se requiere un Possessive Pronoun ('hers')." },
+    { s: ["", " are studying for the English test right now."], opts: ["Their", "Them", "They"], a: "They", rule: "Al inicio de la oración como sujeto antes del verbo se requiere un Subject Pronoun ('They')." },
+    { s: ["The teacher gave ", " a lot of homework yesterday."], opts: ["we", "us", "our"], a: "us", rule: "Después de un verbo ('gave') va un Object Pronoun ('us')." },
+    { s: ["Is that ", " new notebook on the desk?"], opts: ["your", "yours", "you"], a: "your", rule: "Antes de un sustantivo ('new notebook') siempre va un Possessive Adjective ('your')." },
+    { s: ["Maria loves ", " dog very much."], opts: ["she", "her", "hers"], a: "her", rule: "Antes del sustantivo 'dog' necesitamos el adjetivo posesivo 'her'." },
+    { s: ["Please call ", " when you arrive home."], opts: ["I", "my", "me"], a: "me", rule: "Después del verbo 'call' necesitamos el Object Pronoun 'me'." },
+    { s: ["That blue umbrella isn't ", "; I left mine at home."], opts: ["my", "mine", "me"], a: "mine", rule: "Sin sustantivo después, corresponde el Possessive Pronoun 'mine'." },
+    { s: ["John and I live here. This house is ", "."], opts: ["our", "ours", "us"], a: "ours", rule: "Al cerrar la oración sin sustantivo, se usa el Possessive Pronoun 'ours'." },
+    { s: ["Do you know Alice? I work with ", " at the bank."], opts: ["she", "her", "hers"], a: "her", rule: "Después de una preposición ('with') siempre se usa un Object Pronoun ('her')." },
+    { s: ["My parents bought a car. ", " new car is silver."], opts: ["They", "Their", "Theirs"], a: "Their", rule: "Antes del sustantivo 'new car' se usa el Possessive Adjective 'Their'." },
+    { s: ["Where is Roberto? Have you seen ", " today?"], opts: ["he", "him", "his"], a: "him", rule: "Como objeto directo del verbo 'seen' se usa el Object Pronoun 'him'." },
+    { s: ["These seats are not ", "; ours are in row five."], opts: ["their", "theirs", "them"], a: "theirs", rule: "Para reemplazar 'their seats' sin repetir el sustantivo se usa 'theirs'." },
+    { s: ["The cat is drinking ", " milk in the kitchen."], opts: ["it", "its", "it's"], a: "its", rule: "El adjetivo posesivo de 'It' antes de un sustantivo ('milk') es 'its' (sin apóstrofe)." },
+    { s: ["Can you help ", " with these heavy boxes, please?"], opts: ["we", "us", "ours"], a: "us", rule: "Después del verbo 'help' se requiere el Object Pronoun 'us'." },
+    { s: ["Mr. Coronado is ", " English professor this semester."], opts: ["we", "our", "ours"], a: "our", rule: "Antes del sustantivo 'English professor' va el adjetivo posesivo 'our'." },
+    { s: ["I don't eat Peanuts because I am allergic to ", "."], opts: ["they", "their", "them"], a: "them", rule: "Después de la preposición 'to' va el Object Pronoun 'them'." }
+  ],
+  secV: [
+    { s: ["Look! The children ", " ", " football in the yard."], v: "play", a1: ["are"], a2: ["playing"], rule: "'The children' (They) usa 'are' + 'playing' (play solo agrega -ing)." },
+    { s: ["Quiet please! I ", " ", " for my final exam right now."], v: "study", a1: ["am"], a2: ["studying"], rule: "'I' usa 'am' + 'studying' (¡nunca quites la 'y' antes de agregar -ing!)." },
+    { s: ["My mother ", " ", " a delicious cake in the kitchen."], v: "bake", a1: ["is"], a2: ["baking"], rule: "'My mother' (She) usa 'is' + 'baking' (verbos terminados en '-e' muda la eliminan antes de -ing)." },
+    { s: ["We ", " ", " a trip to Oaxaca for next month."], v: "plan", a1: ["are"], a2: ["planning"], rule: "'We' usa 'are' + 'planning' (verbo CVC de una sílaba duplica la consonante final 'n')." },
+    { s: ["The secretary ", " ", " an important email at the moment."], v: "write", a1: ["is"], a2: ["writing"], rule: "'The secretary' usa 'is' + 'writing' (quita la '-e' final y usa una sola 't')." },
+    { s: ["Look at Pedro! He ", " ", " very fast in the park."], v: "run", a1: ["is"], a2: ["running"], rule: "'He' usa 'is' + 'running' (CVC: duplica la 'n' antes de -ing)." },
+    { s: ["They ", " ", " at the beach this weekend."], v: "relax", a1: ["are"], a2: ["relaxing"], rule: "'They' usa 'are' + 'relaxing' (en inglés nunca se duplica la 'x')." },
+    { s: ["She ", " ", " a heavy box of books right now."], v: "hold", a1: ["is"], a2: ["holding"], rule: "'She' usa 'is' + 'holding'." },
+    { s: ["My friends and I ", " ", " a documentary on TV now."], v: "watch", a1: ["are"], a2: ["watching"], rule: "'My friends and I' (We) usa 'are' + 'watching'." },
+    { s: ["Listen! Somebody ", " ", " up the stairs."], v: "come", a1: ["is"], a2: ["coming"], rule: "'Somebody' (singular) usa 'is' + 'coming' (quita la '-e' y no dupliques la 'm')." },
+    { s: ["You ", " ", " on my jacket!"], v: "sit", a1: ["are"], a2: ["sitting"], rule: "'You' usa 'are' + 'sitting' (CVC: duplica la 't')." },
+    { s: ["Mr. Smith ", " ", " in his office at this moment."], v: "work", a1: ["is"], a2: ["working"], rule: "'Mr. Smith' (He) usa 'is' + 'working'." },
+    { s: ["The students ", " ", " French lessons this semester."], v: "take", a1: ["are"], a2: ["taking"], rule: "'The students' (They) usa 'are' + 'taking' (elimina la '-e' de take)." },
+    { s: ["Look! The baby ", " ", " peacefully in the crib."], v: "sleep", a1: ["is"], a2: ["sleeping"], rule: "'The baby' usa 'is' + 'sleeping' (tiene doble vocal 'ee', no duplica la 'p')." },
+    { s: ["I ", " ", " lunch with my coworkers right now."], v: "have", a1: ["am"], a2: ["having"], rule: "'I' usa 'am' + 'having' (elimina la '-e' final de have)." },
+    { s: ["The swimmers ", " ", " in the Olympic pool now."], v: "swim", a1: ["are"], a2: ["swimming"], rule: "'The swimmers' usa 'are' + 'swimming' (CVC: duplica la 'm')." },
+    { s: ["Carla ", " ", " at the party right now."], v: "dance", a1: ["is"], a2: ["dancing"], rule: "'Carla' usa 'is' + 'dancing' (elimina la '-e' antes de -ing)." },
+    { s: ["The movie ", " ", " right now, hurry up!"], v: "begin", a1: ["is"], a2: ["beginning"], rule: "'The movie' (It) usa 'is' + 'beginning' (acento en la última sílaba -> duplica la 'n')." }
+  ],
+  secVI_aff: [
+    { s: ["My family and I ", " to Guadalajara last summer."], v: "go", a: ["went"], rule: "El pasado simple irregular de 'go' es 'went'." },
+    { s: ["She ", " a new laptop two days ago."], v: "buy", a: ["bought"], rule: "El pasado simple irregular de 'buy' es 'bought'." },
+    { s: ["We ", " a delicious pepperoni pizza last night."], v: "eat", a: ["ate"], rule: "El pasado simple irregular de 'eat' es 'ate'." },
+    { s: ["Roberto ", " an email to the director yesterday morning."], v: "write", a: ["wrote"], rule: "El pasado simple irregular de 'write' es 'wrote'." },
+    { s: ["I ", " my best friend at the mall yesterday."], v: "see", a: ["saw"], rule: "El pasado simple irregular de 'see' es 'saw'." },
+    { s: ["They ", " three glasses of orange juice at breakfast."], v: "drink", a: ["drank"], rule: "El pasado simple irregular de 'drink' es 'drank' ('drunk' es participio)." },
+    { s: ["The class ", " at 7:00 a.m. yesterday."], v: "begin", a: ["began"], rule: "El pasado simple irregular de 'begin' es 'began'." },
+    { s: ["Sophia ", " English and French in Canada in 2022."], v: "speak", a: ["spoke"], rule: "El pasado simple irregular de 'speak' es 'spoke'." }
+  ],
+  secVI_neg: [
+    { s: ["They ", " ", " to the party last Saturday."], v: "not / come", a1: ["didn't", "did not"], a2: ["come"], rule: "En Past Simple negativo se usa 'didn't' + verbo en forma base ('come', nunca 'came')." },
+    { s: ["He ", " ", " well last night because of the noise."], v: "not / sleep", a1: ["didn't", "did not"], a2: ["sleep"], rule: "Después del auxiliar 'didn't' el verbo va en infinitivo sin conjugar ('sleep')." },
+    { s: ["We ", " ", " the bus yesterday morning."], v: "not / take", a1: ["didn't", "did not"], a2: ["take"], rule: "Usa 'didn't' + forma base 'take' (no 'took')." },
+    { s: ["I ", " ", " my keys at the office yesterday."], v: "not / forget", a1: ["didn't", "did not"], a2: ["forget"], rule: "Con 'didn't', el verbo 'forget' permanece en su forma base." },
+    { s: ["Maria ", " ", " all her homework two days ago."], v: "not / do", a1: ["didn't", "did not"], a2: ["do"], rule: "Usa el auxiliar 'didn't' seguido del verbo principal 'do' en forma base." },
+    { s: ["My brother ", " ", " his car in 2022."], v: "not / sell", a1: ["didn't", "did not"], a2: ["sell"], rule: "Con 'didn't' el verbo no se pone en pasado ('sell', no 'sold')." },
+    { s: ["She ", " ", " breakfast before class yesterday."], v: "not / have", a1: ["didn't", "did not"], a2: ["have"], rule: "En pasado negativo es 'didn't have' (nunca 'didn't had')." }
+  ],
+  secVI_q: [
+    { s: ["", " you ", " for the history test last night?"], v: "study", a1: ["Did"], a2: ["study"], rule: "Las preguntas en Past Simple inician con 'Did' + sujeto + verbo en forma base ('study')." },
+    { s: ["", " she ", " her grandparents last weekend?"], v: "visit", a1: ["Did"], a2: ["visit"], rule: "Usa el auxiliar 'Did' al inicio y el verbo en forma base ('visit')." },
+    { s: ["Where ", " they ", " on vacation in 2022?"], v: "go", a1: ["did"], a2: ["go"], rule: "Estructura interrogativa: Wh- + 'did' + sujeto + verbo base ('go', no 'went')." },
+    { s: ["", " Carlos ", " the report two days ago?"], v: "finish", a1: ["Did"], a2: ["finish"], rule: "Inicia con 'Did' y mantén 'finish' en su forma base." },
+    { s: ["What time ", " the concert ", " last night?"], v: "begin", a1: ["did"], a2: ["begin"], rule: "Después del auxiliar 'did', el verbo 'begin' va en forma base." }
+  ],
+  secVII: [
+    { type: 1, s: ["At 8:00 p.m. yesterday, I ", " a report for my boss."], v: "write", a: ["was writing"], rule: "Hora específica en el pasado ('At 8:00 p.m. yesterday') -> Past Progressive: 'was writing'." },
+    { type: 1, s: ["We were having dinner when the phone ", "."], v: "ring", a: ["rang"], rule: "La acción corta que interrumpe ('when the phone...') va en Past Simple: 'rang'." },
+    { type: 1, s: ["She ", " when the manager arrived at the office."], v: "not / work", a: ["wasn't working", "was not working"], rule: "Acción en progreso negativa antes de que llegara el gerente: 'wasn't working'." },
+    { type: 2, s: ["", " you ", " TV at 10 p.m. last night?"], v: "watch", a1: ["Were"], a2: ["watching"], rule: "Pregunta en Past Progressive con 'you': 'Were' + you + 'watching'." },
+    { type: 1, s: ["The students were talking loudly while our teacher ", " the lesson."], v: "prepare", a: ["was preparing"], rule: "Después de 'while' (acciones simultáneas en progreso) se usa Past Progressive: 'was preparing'." },
+    { type: 1, s: ["They ", " when the earthquake started."], v: "not / sleep", a: ["weren't sleeping", "were not sleeping"], rule: "Con 'They' el Past Progressive negativo es 'weren't sleeping' (were not sleeping)." },
+    { type: 1, s: ["I was walking down the street when I ", " my old teacher."], v: "see", a: ["saw"], rule: "Después de 'when' para la acción que interrumpe se usa Past Simple: 'saw'." },
+    { type: 2, s: ["What ", " she ", " when you called her?"], v: "do", a1: ["was"], a2: ["doing"], rule: "Pregunta en Past Progressive con 'she': 'was' + she + 'doing'." },
+    { type: 1, s: ["While Tom ", " dinner, Anna was washing the dishes."], v: "cook", a: ["was cooking"], rule: "Dos acciones simultáneas con 'While': Past Progressive 'was cooking'." },
+    { type: 1, s: ["My computer crashed while I ", " my project."], v: "save", a: ["was saving"], rule: "Después de 'while' va la acción en progreso: 'was saving'." },
+    { type: 2, s: ["", " it ", " when you left the building?"], v: "rain", a1: ["Was"], a2: ["raining"], rule: "Con 'it' en pregunta de Past Progressive: 'Was' + it + 'raining'." },
+    { type: 1, s: ["At midnight last night, we ", " through the highway."], v: "drive", a: ["were driving"], rule: "Hora exacta en el pasado con 'we': Past Progressive 'were driving'." },
+    { type: 1, s: ["Carlos broke his arm while he ", " soccer."], v: "play", a: ["was playing"], rule: "'while' introduce la acción larga en progreso: 'was playing'." },
+    { type: 1, s: ["Everyone was listening carefully when the alarm ", " off."], v: "go", a: ["went"], rule: "La acción puntual después de 'when' va en Past Simple: 'went'." },
+    { type: 1, s: ["He ", " attention when the professor asked him a question."], v: "not / pay", a: ["wasn't paying", "was not paying"], rule: "Acción en progreso negativa con 'He': 'wasn't paying'." }
+  ],
+  secVIII_prac: [
+    { s: ["I ", " when the telephone rang last night."], opts: ["slept", "was sleeping", "sleep"], a: "was sleeping", rule: "La acción larga que estaba en curso antes de que sonara el teléfono va en Past Progressive ('was sleeping')." },
+    { s: ["She was cooking dinner when her husband ", " home."], opts: ["arrived", "was arriving", "arrives"], a: "arrived", rule: "La acción corta que interrumpe introducida por 'when' va en Past Simple ('arrived')." },
+    { s: ["While we ", " for the bus, it started to rain."], opts: ["waited", "were waiting", "wait"], a: "were waiting", rule: "Después de 'While' se expresa la acción en progreso en Past Continuous ('were waiting')." },
+    { s: ["What were you doing when the lights ", " out?"], opts: ["went", "were going", "go"], a: "went", rule: "El apagón es una acción instantánea que interrumpe ('when the lights went out')." },
+    { s: ["The kids ", " in the garden while their mom was working."], opts: ["played", "were playing", "are playing"], a: "were playing", rule: "Dos acciones simultáneas en el pasado unidas por 'while' usan Past Continuous ('were playing')." },
+    { s: ["He ", " fast when the police officer stopped him."], opts: ["drove", "was driving", "drives"], a: "was driving", rule: "La acción en progreso antes de ser detenido es 'was driving'." },
+    { s: ["I met my best friend while I ", " in Monterrey."], opts: ["lived", "was living", "live"], a: "was living", rule: "Después de 'while' usamos Past Continuous ('was living') como acción de fondo." },
+    { s: ["They were having a meeting when the director ", " the room."], opts: ["entered", "was entering", "enters"], a: "entered", rule: "La acción puntual introducida por 'when' va en Past Simple ('entered')." },
+    { s: ["At 9:30 p.m. last night, my sister ", " for her biology exam."], opts: ["studied", "was studying", "studies"], a: "was studying", rule: "Con una hora exacta en el pasado se usa Past Continuous ('was studying')." },
+    { s: ["Sally dropped her phone while she ", " for the train."], opts: ["ran", "was running", "runs"], a: "was running", rule: "Después de 'while' va la acción en progreso ('was running')." }
+  ],
+  secVIII_theo: [
+    { s: ["The Past Continuous is used to describe: ", "."], opts: ["future plans", "actions in progress in the past", "habits"], a: "actions in progress in the past", rule: "Por definición gramatical, el Past Continuous describe acciones en progreso en un momento del pasado." },
+    { s: ["We use ", " to express simultaneous actions."], opts: ["while", "because", "after"], a: "while", rule: "El conector 'while' (mientras) se utiliza para unir dos acciones simultáneas en progreso." },
+    { s: ["We usually use ", " before a short action in Simple Past that interrupts a longer action."], opts: ["when", "while", "during"], a: "when", rule: "'when' precede a la acción corta en Past Simple que interrumpe a otra en progreso." },
+    { s: ["To form the Past Continuous we need: ", "."], opts: ["was / were + verb -ing", "did + base verb", "have / has + participle"], a: "was / were + verb -ing", rule: "La fórmula del Past Continuous es el pasado de To Be (was/were) + gerundio (-ing)." }
+  ],
+  secIX: [
+    { s: ["I ", " never ", " rugby."], v: "play", a1: ["have"], a2: ["played"], rule: "Con 'I' se usa el auxiliar 'have' + participio regular 'played'." },
+    { s: ["She ", " ", " three countries this year."], v: "visit", a1: ["has"], a2: ["visited"], rule: "Con 'She' se usa 'has' + participio 'visited'." },
+    { s: ["", " you ever ", " an animal?"], v: "save", a1: ["Have"], a2: ["saved"], rule: "Pregunta con 'you' en Present Perfect: 'Have' + you + ever + 'saved'." },
+    { s: ["They ", " already ", " the project."], v: "finish", a1: ["have"], a2: ["finished"], rule: "Con 'They' se usa 'have' + already + participio 'finished'." },
+    { s: ["We ", " not ", " that movie yet."], v: "see", a1: ["have"], a2: ["seen"], rule: "Como ya está impreso 'not', escribe el auxiliar 'have' y el participio irregular 'seen' (no 'saw')." },
+    { s: ["He ", " just ", " a new laptop."], v: "buy", a1: ["has"], a2: ["bought"], rule: "Con 'He' se usa 'has' + participio de buy: 'bought'." },
+    { s: ["", " she ever ", " Japanese food?"], v: "eat", a1: ["Has"], a2: ["eaten"], rule: "Con 'she' usa 'Has' + participio irregular 'eaten'." },
+    { s: ["My parents ", " ", " in this house for twenty years."], v: "live", a1: ["have"], a2: ["lived"], rule: "'My parents' (They) usa 'have' + 'lived'." },
+    { s: ["Roberto ", " not ", " his report yet."], v: "write", a1: ["has"], a2: ["written"], rule: "'Roberto' (He) usa 'has' (el 'not' ya está escrito) + participio 'written' (con doble t)." },
+    { s: ["I ", " already ", " two cups of coffee today."], v: "drink", a1: ["have"], a2: ["drunk"], rule: "En Present Perfect el participio de 'drink' es 'drunk' ('drank' es pasado simple)." },
+    { s: ["", " they ", " the contract yet?"], v: "read", a1: ["Have"], a2: ["read"], rule: "Con 'they' usa 'Have' + participio 'read'." },
+    { s: ["Anna ", " never ", " to Europe."], v: "go", a1: ["has"], a2: ["gone", "been"], rule: "Con 'Anna' (She) usa 'has' + participio 'gone' (o 'been')." },
+    { s: ["We ", " ", " each other since high school."], v: "know", a1: ["have"], a2: ["known"], rule: "Con 'We' usa 'have' + participio irregular de know: 'known'." },
+    { s: ["The professor ", " already ", " the exams."], v: "check", a1: ["has"], a2: ["checked"], rule: "'The professor' (He/She) lleva 'has' + participio 'checked'." },
+    { s: ["You ", " not ", " your vegetables yet."], v: "eat", a1: ["have"], a2: ["eaten"], rule: "Con 'You' usa 'have' + not + participio 'eaten'." }
+  ],
+  secX: [
+    { s: ["Have you ", " ridden a horse in the countryside?"], a: ["ever"], rule: "'ever' se usa en preguntas para saber si 'alguna vez' en tu vida has hecho algo." },
+    { s: ["My sister has lived in Monterrey ", " 2018."], a: ["since"], rule: "'since' se usa antes de un punto exacto de inicio en el tiempo ('2018')." },
+    { s: ["We have studied English at this university ", " three semesters."], a: ["for"], rule: "'for' se usa antes de un periodo o duración de tiempo ('three semesters')." },
+    { s: ["They haven't submitted the final project ", "."], a: ["yet"], rule: "'yet' va al final de oraciones negativas e interrogativas ('todavía / aún')." },
+    { s: ["I have ", " eaten sushi; I don't like raw fish."], a: ["never"], rule: "'never' se usa con el auxiliar afirmativo ('have never eaten') para expresar 'nunca'." },
+    { s: ["She has ", " finished her exam, so she can go home now."], a: ["already"], rule: "'already' (ya) va entre have/has y el participio en oraciones afirmativas." },
+    { s: ["Has the plane landed at the airport ", "?"], a: ["yet"], rule: "Al final de una pregunta en Present Perfect ('¿ya...?') se usa 'yet'." },
+    { s: ["Mr. Coronado has taught English ", " more than ten years."], a: ["for"], rule: "'more than ten years' es una cantidad de tiempo (duración) -> usa 'for'." },
+    { s: ["I haven't seen my cousins ", " last Christmas."], a: ["since"], rule: "'last Christmas' marca el momento exacto en que inició la acción -> usa 'since'." },
+    { s: ["Have your parents ", " traveled by boat?"], a: ["ever"], rule: "En preguntas sobre experiencias de vida ('alguna vez') se coloca 'ever' antes del participio." },
+    { s: ["Don't buy tickets! I have ", " bought them for us."], a: ["already"], rule: "Acción afirmativa que ya ocurrió antes de lo esperado -> 'already'." },
+    { s: ["He has ", " failed an English test; he always gets 100."], a: ["never"], rule: "Con verbo en afirmativo ('has') para negar una experiencia se usa 'never'." },
+    { s: ["We have known each other ", " we were children."], a: ["since"], rule: "Antes de una cláusula en pasado que indica el inicio ('we were children') se usa 'since'." },
+    { s: ["She has been in the library ", " two hours."], a: ["for"], rule: "'two hours' es una duración de tiempo -> usa 'for'." },
+    { s: ["I haven't had breakfast ", ", I'm starving!"], a: ["yet"], rule: "Oración negativa con espacio al final de la cláusula -> usa 'yet'." }
+  ],
+  secXI: [
+    { s: ["I ", " to Cancun last summer."], opts: ["have gone", "went"], a: "went", rule: "'last summer' es un tiempo pasado terminado -> exige Simple Past ('went')." },
+    { s: ["She ", " her homework already."], opts: ["finished", "has finished"], a: "has finished", rule: "El adverbio 'already' sin fecha pasada específica indica Present Perfect ('has finished')." },
+    { s: ["We ", " that museum in 2024."], opts: ["visited", "have visited"], a: "visited", rule: "'in 2024' es una fecha cerrada del pasado -> exige Simple Past ('visited')." },
+    { s: ["Have you ever ", " a celebrity?"], opts: ["met", "meet"], a: "met", rule: "Después de 'Have you ever...' el verbo debe ir en Past Participle ('met')." },
+    { s: ["They ", " the game yesterday."], opts: ["have won", "won"], a: "won", rule: "'yesterday' es un marcador de tiempo terminado -> exige Simple Past ('won')." },
+    { s: ["My brother ", " three books this month."], opts: ["read", "has read"], a: "has read", rule: "'this month' es un periodo de tiempo que aún no termina -> Present Perfect ('has read')." },
+    { s: ["Leonardo da Vinci ", " the Mona Lisa."], opts: ["painted", "has painted"], a: "painted", rule: "Acción realizada por un personaje histórico ya fallecido -> Simple Past ('painted')." },
+    { s: ["I ", " my keys! I can't open the door right now."], opts: ["lost", "have lost"], a: "have lost", rule: "Acción pasada con resultado directo en el presente y sin fecha -> Present Perfect ('have lost')." },
+    { s: ["We ", " a great movie on Netflix last night."], opts: ["have seen", "saw"], a: "saw", rule: "'last night' especifica cuándo ocurrió en el pasado -> Simple Past ('saw')." },
+    { s: ["Mr. Garcia ", " here since 2019."], opts: ["worked", "has worked"], a: "has worked", rule: "'since 2019' conecta el pasado con el presente -> Present Perfect ('has worked')." },
+    { s: ["Where did you ", " that jacket?"], opts: ["bought", "buy"], a: "buy", rule: "Después del auxiliar 'did' el verbo siempre va en forma base ('buy')." },
+    { s: ["She ", " sushi before; this is her first time."], opts: ["didn't try", "has never tried"], a: "has never tried", rule: "Experiencia de vida hasta el momento actual ('before') -> Present Perfect ('has never tried')." },
+    { s: ["They ", " from university two years ago."], opts: ["graduated", "have graduated"], a: "graduated", rule: "'two years ago' marca un punto cerrado en el pasado -> Simple Past ('graduated')." },
+    { s: ["I ", " Rodrigo three times today."], opts: ["called", "have called"], a: "have called", rule: "'today' es un periodo no concluido -> Present Perfect ('have called')." },
+    { s: ["The train ", " ten minutes ago."], opts: ["left", "has left"], a: "left", rule: "La palabra 'ago' siempre requiere Simple Past ('left')." }
+  ],
+  secXII_zero: [
+    { s: ["If you heat ice, it ", "."], v: "melt", a: ["melts"], rule: "Zero Conditional (hecho científico): If + Present Simple, Present Simple. Con 'it' agrega '-s' ('melts')." },
+    { s: ["If people ", ", they get hungry."], v: "not / eat", a: ["don't eat", "do not eat"], rule: "Zero Conditional: en la cláusula 'If' con 'people' (plural) se usa Present Simple negativo ('don't eat')." },
+    { s: ["If you mix red and blue, you ", " purple."], v: "get", a: ["get"], rule: "Zero Conditional (verdad general): ambas cláusulas van en Present Simple ('get')." },
+    { s: ["Plants die if they ", " enough water."], v: "not / get", a: ["don't get", "do not get"], rule: "Zero Conditional: hecho natural -> Present Simple en ambas partes ('don't get')." },
+    { s: ["If water reaches 100 degrees Celsius, it ", "."], v: "boil", a: ["boils"], rule: "Zero Conditional (ley física): con 'it' en Present Simple el verbo lleva '-s' ('boils')." },
+    { s: ["If babies are hungry, they ", "."], v: "cry", a: ["cry"], rule: "Zero Conditional: con 'they' el verbo en Present Simple va en forma base ('cry')." },
+    { s: ["If my husband cooks dinner, he always ", " the food."], v: "burn", a: ["burns"], rule: "Zero Conditional (hábito siempre verdadero): con 'he' agrega '-s' ('burns')." },
+    { s: ["You get tired the next day if you ", " well."], v: "not / sleep", a: ["don't sleep", "do not sleep"], rule: "Zero Conditional: hábito general -> Present Simple ('don't sleep')." },
+    { s: ["If you touch fire, you ", " burned."], v: "get", a: ["get"], rule: "Zero Conditional (causa y efecto inmediato): usa Present Simple ('get')." }
+  ],
+  secXII_first: [
+    { s: ["If it rains tomorrow, we ", " at home."], v: "stay", a: ["will stay", "'ll stay"], rule: "First Conditional (futuro posible): la cláusula resultado lleva 'will + verbo base' ('will stay')." },
+    { s: ["She will pass the exam if she ", " hard."], v: "study", a: ["studies"], rule: "¡Regla de oro! En la cláusula con 'if' NUNCA se usa 'will'; usa Present Simple ('studies')." },
+    { s: ["If you don't hurry, you ", " the bus."], v: "miss", a: ["will miss", "'ll miss"], rule: "First Conditional: la consecuencia futura lleva 'will + verbo base' ('will miss')." },
+    { s: ["They ", " to the beach if the weather is cold tomorrow."], v: "not / go", a: ["won't go", "will not go"], rule: "La cláusula principal negativa en First Conditional usa 'won't (will not) + verbo base' ('won't go')." },
+    { s: ["If I ", " enough money next month, I will buy a new phone."], v: "save", a: ["save"], rule: "En First Conditional, la condición después de 'If' va en Present Simple ('save', nunca 'will save')." },
+    { s: ["What will you do if you ", " your flight?"], v: "lose", a: ["lose"], rule: "Después de 'if' siempre se usa Present Simple ('lose'), aunque la pregunta sea sobre el futuro." },
+    { s: ["If Carlos calls me tonight, I ", " him the truth."], v: "tell", a: ["will tell", "'ll tell"], rule: "Cláusula principal del First Conditional: 'will tell'." },
+    { s: ["We will be late for the meeting if we ", " a taxi right now."], v: "not / take", a: ["don't take", "do not take"], rule: "La cláusula con 'if' en First Conditional niega en Present Simple ('don't take', nunca 'won't take')." },
+    { s: ["If she eats too much chocolate, she ", " sick."], v: "feel", a: ["will feel", "'ll feel"], rule: "Consecuencia futura probable en First Conditional: 'will feel'." }
+  ],
+  secXIII_readings: [
+    {
+      text: "Yesterday at the office, everyone was very busy at 11:00 a.m. Laura was typing a financial report while Carlos was talking to an important client on the phone. Suddenly, the lights went out and the computers stopped working, so the manager sent everyone home early.",
+      qs: [
+        { q: "What was Laura doing at 11:00 a.m. yesterday?", rx: /^(laura|she)\s+was\s+(typing|writing)\s+(a\s+)?(financial\s+)?report/i, sample: "She was typing a financial report at 11:00 a.m.", rule: "Responde con SUBJECT + VERB + COMPLEMENT en Past Progressive: 'She was typing a financial report.'" },
+        { q: "Who was Carlos talking to on the phone?", rx: /^(carlos|he)\s+was\s+(talking|speaking)\s+to\s+(an\s+important\s+client|a\s+client)/i, sample: "He was talking to an important client on the phone.", rule: "Oración completa en Past Progressive: 'Carlos / He was talking to an important client.'" },
+        { q: "What happened suddenly at the office?", rx: /^(suddenly\s*,?\s*)?(the\s+lights\s+went\s+out|the\s+computers\s+stopped\s+working)/i, sample: "The lights went out and the computers stopped working.", rule: "Usa SUBJECT + VERB en Past Simple: 'The lights went out (and the computers stopped working).'" },
+        { q: "What did the manager do after the lights went out?", rx: /^(the\s+manager|he|she)\s+sent\s+everyone\s+home(\s+early)?/i, sample: "The manager sent everyone home early.", rule: "Oración completa en Past Simple: 'The manager / He sent everyone home early.'" }
+      ]
+    },
+    {
+      text: "Last Friday afternoon at the university library, Sofia was studying for her English exam while her friends were reading history books at the big table. Suddenly, the fire alarm rang loudly, so all the students left the building immediately.",
+      qs: [
+        { q: "Where was Sofia studying last Friday afternoon?", rx: /^(sofia|she)\s+was\s+studying\s+(at|in)\s+the\s+(university\s+)?library/i, sample: "She was studying at the university library.", rule: "Oración completa (SUBJECT + VERB + COMPLEMENT): 'She was studying at the university library.'" },
+        { q: "What were her friends reading at the big table?", rx: /^(her\s+friends|they)\s+were\s+reading\s+history\s+books/i, sample: "They were reading history books at the big table.", rule: "Oración completa en Past Progressive plural: 'They were reading history books.'" },
+        { q: "What happened suddenly in the library?", rx: /^(suddenly\s*,?\s*)?the\s+(fire\s+)?alarm\s+rang(\s+loudly)?/i, sample: "The fire alarm rang loudly.", rule: "Oración completa en Past Simple: 'The fire alarm rang loudly.'" },
+        { q: "What did the students do when the alarm rang?", rx: /^((all\s+)?the\s+students|they)\s+left\s+the\s+(building|library)(\s+immediately)?/i, sample: "All the students left the building immediately.", rule: "Oración completa con el pasado de leave ('left'): 'They left the building immediately.'" }
+      ]
+    },
+    {
+      text: "Two days ago at the airport, Mr. Davis was drinking a cup of coffee while his wife was buying magazines at the bookshop. Suddenly, the airline canceled their flight to Madrid because of a snowstorm, so they stayed at a hotel near the terminal.",
+      qs: [
+        { q: "What was Mr. Davis drinking at the airport?", rx: /^(mr\.?\s+davis|he)\s+was\s+drinking\s+(a\s+cup\s+of\s+)?coffee/i, sample: "He was drinking a cup of coffee at the airport.", rule: "Oración completa (SUBJECT + VERB + COMPLEMENT): 'He was drinking a cup of coffee.'" },
+        { q: "What was his wife buying at the bookshop?", rx: /^(his\s+wife|mrs\.?\s+davis|she)\s+was\s+buying\s+magazines/i, sample: "She was buying magazines at the bookshop.", rule: "Oración completa en Past Progressive: 'She was buying magazines at the bookshop.'" },
+        { q: "Why did the airline cancel their flight to Madrid?", rx: /^((the\s+airline|it|they)\s+canceled\s+(their|the)\s+flight\s+because\s+of\s+(a\s+)?snowstorm|because\s+there\s+was\s+a\s+snowstorm|(the\s+airline|they)\s+canceled\s+it\s+because\s+of\s+(a\s+)?snowstorm)/i, sample: "The airline canceled their flight because of a snowstorm.", rule: "Responde con estructura completa: 'The airline canceled their flight because of a snowstorm.'" },
+        { q: "Where did they stay after the flight was canceled?", rx: /^(they|mr\.?\s+davis\s+and\s+his\s+wife)\s+stayed\s+(at|in)\s+a\s+hotel(\s+near\s+the\s+terminal)?/i, sample: "They stayed at a hotel near the terminal.", rule: "Oración completa en Past Simple: 'They stayed at a hotel near the terminal.'" }
+      ]
+    }
+  ],
+  secXIII_open: [
+    { q: "Where were you born?", rx: /^i\s+was\s+born\s+in\s+[a-z0-9\u00C0-\u017F\s,.'-]{2,}/i, sample: "I was born in Tampico, Tamaulipas.", rule: "Debes responder con oración completa en pasado: 'I was born in [tu ciudad/país].' (Nunca 'I am born')." },
+    { q: "What did you eat for lunch yesterday?", rx: /^i\s+(ate|had)\s+[a-z0-9\u00C0-\u017F\s,.'-]{2,}/i, sample: "I ate chicken tacos for lunch yesterday.", rule: "La pregunta está en Past Simple ('did you eat'), responde con 'I ate [comida]...' o 'I had [comida]...'." },
+    { q: "Does AMLO speak German?", rx: /^(no\s*,?\s*he\s+(doesn't|does\s+not)(\s+speak\s+german)?|he\s+(doesn't|does\s+not)\s+speak\s+german)/i, sample: "No, he doesn't speak German.", rule: "Pregunta capciosa del profesor en 3ª persona singular: 'No, he doesn't.' o 'No, he doesn't speak German.'" },
+    { q: "Have you ever traveled to Mars?", rx: /^(no\s*,?\s*i\s+(haven't|have\s+not)|no\s*,?\s*i\s+have\s+never\s+traveled\s+to\s+mars|i\s+have\s+never\s+traveled\s+to\s+mars)/i, sample: "No, I have never traveled to Mars.", rule: "Pregunta en Present Perfect ('Have you ever...'): responde con el mismo auxiliar: 'No, I haven't.' o 'No, I have never traveled to Mars.'" },
+    { q: "What are you doing right now?", rx: /^i\s*(am|'m)\s+(taking|doing|answering|solving|studying|writing|completing)\s+[a-z0-9\u00C0-\u017F\s,.'-]{2,}/i, sample: "I am taking an English exam right now.", rule: "Pregunta en Present Progressive: responde con 'I am + verbo -ing + complemento' (ej. 'I am taking an English exam right now')." },
+    { q: "What will you do if it rains this weekend?", rx: /^(if\s+it\s+rains(\s+this\s+weekend)?\s*,?\s*i\s+(will|'ll)\s+[a-z]{2,}.+|i\s+(will|'ll)\s+[a-z]{2,}.+)/i, sample: "If it rains this weekend, I will stay at home and watch movies.", rule: "Pregunta en First Conditional: responde con 'I will + verbo base + complemento' (ej. 'I will stay at home if it rains')." },
+    { q: "Does Claudia Sheinbaum live in Japan?", rx: /^(no\s*,?\s*she\s+(doesn't|does\s+not)(\s+live\s+in\s+japan)?|she\s+(doesn't|does\s+not)\s+live\s+in\s+japan)/i, sample: "No, she doesn't live in Japan. She lives in Mexico.", rule: "Tercera persona femenina en Present Simple: 'No, she doesn't live in Japan.'" },
+    { q: "What time did you wake up today?", rx: /^i\s+(woke\s+up|waked\s+up|got\s+up)\s+(at|around)\s+[a-z0-9:.\s]{1,}/i, sample: "I woke up at 6:30 a.m. today.", rule: "Usa SUBJECT + VERB en Past Simple ('woke up') + 'at [hora]': 'I woke up at 7:00 a.m. today.'" },
+    { q: "Have you already finished university?", rx: /^(no\s*,?\s*i\s+(haven't|have\s+not)(\s+finished\s+university(\s+yet)?)?|yes\s*,?\s*i\s+have(\s+already\s+finished\s+university)?)/i, sample: "No, I haven't finished university yet.", rule: "Pregunta con 'Have you...': responde usando 'No, I haven't finished university yet' o 'Yes, I have'." },
+    { q: "Where does your English professor work?", rx: /^(he|my\s+(english\s+)?professor|prof\.?\s+cruz\s+ra[uú]l\s*([a-z\s]*)?)\s+works\s+(at|in)\s+[a-z0-9\u00C0-\u017F\s,.'-]{2,}/i, sample: "He works at the university.", rule: "En 3ª persona del Present Simple recuerda agregar '-s' al verbo: 'He works at the university.'" },
+    { q: "Did Christopher Columbus discover America in 2020?", rx: /^(no\s*,?\s*he\s+(didn't|did\s+not)(\s+discover\s+america\s+in\s+2020)?|he\s+(didn't|did\s+not)\s+discover\s+america\s+in\s+2020)/i, sample: "No, he didn't discover America in 2020. He discovered it in 1492.", rule: "Pregunta capciosa en Past Simple: responde con 'No, he didn't (discover America in 2020).'" },
+    { q: "What were you doing at 10:00 p.m. last night?", rx: /^i\s+was\s+[a-z]+ing\s+.+/i, sample: "I was sleeping in my bedroom at 10:00 p.m. last night.", rule: "La pregunta está en Past Progressive ('What were you doing...'): responde con 'I was + verbo-ing + complemento'." }
+  ]
+};
+
+// =========================================================================
+// BANCO DE 60 VERBOS (Fiel a la lista oficial del Prof. Cruz Raúl García Coronado)
+// =========================================================================
+const PROF_20_ORDER = [
+  "work","drink","come","play","do","go","take","study","read","love",
+  "dance","write","see","sleep","relax","speak","watch","have","begin","finish"
+];
+
+const VERBS_60 = [
+  // Los 20 favoritos del profe
+  { inf:"work", past:["worked"], part:["worked"], ger:["working"], es:"trabajar" },
+  { inf:"drink", past:["drank"], part:["drunk"], ger:["drinking"], es:"beber" },
+  { inf:"come", past:["came"], part:["come"], ger:["coming"], es:"venir" },
+  { inf:"play", past:["played"], part:["played"], ger:["playing"], es:"jugar" },
+  { inf:"do", past:["did"], part:["done"], ger:["doing"], es:"hacer" },
+  { inf:"go", past:["went"], part:["gone"], ger:["going"], es:"ir" },
+  { inf:"take", past:["took"], part:["taken"], ger:["taking"], es:"tomar, llevar" },
+  { inf:"study", past:["studied"], part:["studied"], ger:["studying"], es:"estudiar" },
+  { inf:"read", past:["read"], part:["read"], ger:["reading"], es:"leer" },
+  { inf:"love", past:["loved"], part:["loved"], ger:["loving"], es:"amar" },
+  { inf:"dance", past:["danced"], part:["danced"], ger:["dancing"], es:"bailar" },
+  { inf:"write", past:["wrote"], part:["written"], ger:["writing"], es:"escribir" },
+  { inf:"see", past:["saw"], part:["seen"], ger:["seeing"], es:"ver" },
+  { inf:"sleep", past:["slept"], part:["slept"], ger:["sleeping"], es:"dormir" },
+  { inf:"relax", past:["relaxed"], part:["relaxed"], ger:["relaxing"], es:"relajarse" },
+  { inf:"speak", past:["spoke"], part:["spoken"], ger:["speaking"], es:"hablar" },
+  { inf:"watch", past:["watched"], part:["watched"], ger:["watching"], es:"mirar, ver" },
+  { inf:"have", past:["had"], part:["had"], ger:["having"], es:"tener, haber" },
+  { inf:"begin", past:["began"], part:["begun"], ger:["beginning"], es:"empezar" },
+  { inf:"finish", past:["finished"], part:["finished"], ger:["finishing"], es:"terminar" },
+  // 40 verbos adicionales de la hoja oficial del profesor
+  { inf:"buy", past:["bought"], part:["bought"], ger:["buying"], es:"comprar" },
+  { inf:"bring", past:["brought"], part:["brought"], ger:["bringing"], es:"traer" },
+  { inf:"catch", past:["caught"], part:["caught"], ger:["catching"], es:"atrapar" },
+  { inf:"choose", past:["chose"], part:["chosen"], ger:["choosing"], es:"escoger" },
+  { inf:"cut", past:["cut"], part:["cut"], ger:["cutting"], es:"cortar" },
+  { inf:"drive", past:["drove"], part:["driven"], ger:["driving"], es:"manejar" },
+  { inf:"fall", past:["fell"], part:["fallen"], ger:["falling"], es:"caer" },
+  { inf:"feel", past:["felt"], part:["felt"], ger:["feeling"], es:"sentir" },
+  { inf:"find", past:["found"], part:["found"], ger:["finding"], es:"encontrar" },
+  { inf:"fly", past:["flew"], part:["flown"], ger:["flying"], es:"volar" },
+  { inf:"forget", past:["forgot"], part:["forgotten"], ger:["forgetting"], es:"olvidar" },
+  { inf:"give", past:["gave"], part:["given"], ger:["giving"], es:"dar" },
+  { inf:"hear", past:["heard"], part:["heard"], ger:["hearing"], es:"oír" },
+  { inf:"know", past:["knew"], part:["known"], ger:["knowing"], es:"conocer, saber" },
+  { inf:"leave", past:["left"], part:["left"], ger:["leaving"], es:"salir, abandonar" },
+  { inf:"lose", past:["lost"], part:["lost"], ger:["losing"], es:"perder" },
+  { inf:"make", past:["made"], part:["made"], ger:["making"], es:"hacer, fabricar" },
+  { inf:"meet", past:["met"], part:["met"], ger:["meeting"], es:"conocer (gente)" },
+  { inf:"pay", past:["paid"], part:["paid"], ger:["paying"], es:"pagar" },
+  { inf:"put", past:["put"], part:["put"], ger:["putting"], es:"poner" },
+  { inf:"run", past:["ran"], part:["run"], ger:["running"], es:"correr" },
+  { inf:"say", past:["said"], part:["said"], ger:["saying"], es:"decir" },
+  { inf:"sell", past:["sold"], part:["sold"], ger:["selling"], es:"vender" },
+  { inf:"send", past:["sent"], part:["sent"], ger:["sending"], es:"mandar" },
+  { inf:"sing", past:["sang"], part:["sung"], ger:["singing"], es:"cantar" },
+  { inf:"sit", past:["sat"], part:["sat"], ger:["sitting"], es:"sentarse" },
+  { inf:"spend", past:["spent"], part:["spent"], ger:["spending"], es:"gastar" },
+  { inf:"swim", past:["swam"], part:["swum"], ger:["swimming"], es:"nadar" },
+  { inf:"teach", past:["taught"], part:["taught"], ger:["teaching"], es:"enseñar" },
+  { inf:"tell", past:["told"], part:["told"], ger:["telling"], es:"decir, contar" },
+  { inf:"think", past:["thought"], part:["thought"], ger:["thinking"], es:"pensar" },
+  { inf:"understand", past:["understood"], part:["understood"], ger:["understanding"], es:"entender" },
+  { inf:"wear", past:["wore"], part:["worn"], ger:["wearing"], es:"usar, vestir" },
+  { inf:"win", past:["won"], part:["won"], ger:["winning"], es:"ganar" },
+  { inf:"break", past:["broke"], part:["broken"], ger:["breaking"], es:"romper" },
+  { inf:"build", past:["built"], part:["built"], ger:["building"], es:"construir" },
+  { inf:"get", past:["got"], part:["gotten","got"], ger:["getting"], es:"conseguir" },
+  { inf:"hold", past:["held"], part:["held"], ger:["holding"], es:"sostener" },
+  { inf:"plan", past:["planned"], part:["planned"], ger:["planning"], es:"planear" },
+  { inf:"stop", past:["stopped"], part:["stopped"], ger:["stopping"], es:"parar" }
+];
+const VERB_MAP = Object.fromEntries(VERBS_60.map(v => [v.inf, v]));
+
+// =========================================================================
+// UTILIDADES Y DIAGNÓSTICO INTELIGENTE DE ORTOGRAFÍA
+// =========================================================================
+const STATE = {
+  verbMode: "prof20", // "prof20" | "random60"
+  examSeed: 1,
+  current: {},
+  tasks: []
+};
+
+function pick(arr, n) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy.slice(0, n);
+}
+
+function norm(str, keepPunct = false) {
+  let s = (str || "").toLowerCase().replace(/[’‘`]/g, "'").trim();
+  if (!keepPunct) s = s.replace(/[.?!,;]+$/g, "");
+  return s.replace(/\s+/g, " ").trim();
+}
+
+function expandContractions(s) {
+  return s
+    .replace(/\bcan't\b/g, "cannot")
+    .replace(/\bwon't\b/g, "will not")
+    .replace(/\bshan't\b/g, "shall not")
+    .replace(/\bdon't\b/g, "do not")
+    .replace(/\bdoesn't\b/g, "does not")
+    .replace(/\bdidn't\b/g, "did not")
+    .replace(/\bisn't\b/g, "is not")
+    .replace(/\baren't\b/g, "are not")
+    .replace(/\bwasn't\b/g, "was not")
+    .replace(/\bweren't\b/g, "were not")
+    .replace(/\bhaven't\b/g, "have not")
+    .replace(/\bhasn't\b/g, "has not")
+    .replace(/\bhadn't\b/g, "had not")
+    .replace(/\bi'm\b/g, "i am")
+    .replace(/\byou're\b/g, "you are")
+    .replace(/\bwe're\b/g, "we are")
+    .replace(/\bthey're\b/g, "they are")
+    .replace(/\bhe's\b/g, "he is")
+    .replace(/\bshe's\b/g, "she is")
+    .replace(/\bit's\b/g, "it is")
+    .replace(/\bi'll\b/g, "i will")
+    .replace(/\byou'll\b/g, "you will")
+    .replace(/\bhe'll\b/g, "he will")
+    .replace(/\bshe'll\b/g, "she will")
+    .replace(/\bwe'll\b/g, "we will")
+    .replace(/\bthey'll\b/g, "they will")
+    .replace(/\b0([1-9]:[0-5][0-9])\b/g, "$1");
+}
+
+function matchAnswer(userRaw, validList) {
+  const u1 = norm(userRaw);
+  const u2 = expandContractions(u1);
+  if (!u1) return false;
+  return validList.some(v => {
+    const t1 = norm(v);
+    const t2 = expandContractions(t1);
+    return u1 === t1 || u2 === t2;
+  });
+}
+
+function diagnoseVerbError(verbObj, col, userVal) {
+  const u = norm(userVal);
+  const inf = verbObj.inf;
+  if (!u) return `Celda vacía. Forma correcta de "${inf}": ${verbObj[col][0]}.`;
+
+  if (col === "ger") {
+    const target = verbObj.ger[0];
+    if (inf.endsWith("e") && !inf.endsWith("ee") && u === inf + "ing") {
+      return `¡Ojo con la 'e' muda! En verbos terminados en '-e' como "${inf}", debes eliminar la 'e' antes de agregar '-ing' → "${target}" (nunca "${u}").`;
+    }
+    if (inf === "come" && (u === "comming" || u === "comeing")) {
+      return `¡Error clásico en "${inf}"! Elimina la '-e' y NO dupliques la 'm' → "coming".`;
+    }
+    if (inf === "write" && (u === "writting" || u === "writeing")) {
+      return `¡Cuidado con "${inf}"! En el gerundio "writing" solo va UNA 't' (a diferencia del participio "written").`;
+    }
+    if (inf.endsWith("y") && u === inf.slice(0, -1) + "ing") {
+      return `¡Nunca elimines la 'y' en el gerundio! Conserva la 'y' y agrega '-ing': "${inf}" → "${target}" (nunca "${u}").`;
+    }
+    const doubleGerunds = ["beginning","running","swimming","cutting","sitting","putting","getting","forgetting","planning","stopping","winning"];
+    if (doubleGerunds.includes(target) && u === inf + "ing") {
+      const last = inf[inf.length - 1];
+      return `¡Regla CVC! En "${inf}" debes duplicar la consonante final '${last.toUpperCase()}' antes de agregar '-ing' → "${target}".`;
+    }
+    if (inf === "relax" && u === "relaxxing") {
+      return `En inglés jamás se duplica la letra 'x': el gerundio de "relax" es "relaxing".`;
+    }
+    return `Gerundio incorrecto para "${inf}". Debe ser "${target}".`;
+  }
+
+  if (col === "past") {
+    const target = verbObj.past[0];
+    if (u === inf + "ed" && target !== inf + "ed") {
+      if (inf === "study") return `"study" termina en consonante + 'y': cambia la 'y' por '-ied' → "studied".`;
+      if (inf === "plan" || inf === "stop") return `Verbo CVC: duplica la consonante final antes de '-ed' → "${target}".`;
+      return `"${inf}" es un verbo IRREGULAR; no agrega '-ed'. Su pasado simple es "${target}".`;
+    }
+    if (verbObj.part.includes(u) && !verbObj.past.includes(u)) {
+      return `Escribiste el Past Participle ("${u}"). El Past Simple de "${inf}" es "${target}".`;
+    }
+    return `Past Simple de "${inf}": "${target}".`;
+  }
+
+  if (col === "part") {
+    const target = verbObj.part[0];
+    if (verbObj.past.includes(u) && !verbObj.part.includes(u)) {
+      return `¡No confundas columnas! "${u}" es el Past Simple; el Past Participle de "${inf}" es "${target}".`;
+    }
+    if (inf === "write" && u === "writen") {
+      return `El participio de "write" se escribe con DOBLE 't': "written".`;
+    }
+    if (inf === "come" && u === "came") {
+      return `¡Trampa clásica! En "come", el Past Participle vuelve a ser "come" (eat | ate | eaten, pero come | came | come).`;
+    }
+    if (inf === "run" && u === "ran") {
+      return `En "run", el Past Participle vuelve a ser "run" (run | ran | run).`;
+    }
+    return `Past Participle de "${inf}": "${target}".`;
+  }
+  return `Respuesta correcta: ${verbObj[col][0]}`;
+}
+
+function toast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("on");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove("on"), 3400);
+}
+
+// =========================================================================
+// GENERACIÓN Y RENDERIZADO DEL EXAMEN
+// =========================================================================
+function buildExam() {
+  document.body.classList.remove("graded-on", "show-key");
+  document.getElementById("btnKey").classList.remove("on");
+  document.getElementById("btnKey").textContent = "Ver respuestas";
+  STATE.tasks = [];
+
+  STATE.current.secI = pick(BANK.secI, 6);
+  STATE.current.secII = pick(BANK.secII, 6);
+  STATE.current.secIII = pick(BANK.secIII, 6);
+  STATE.current.secIV_B = pick(BANK.secIV_B, 4);
+  STATE.current.secV = pick(BANK.secV, 10);
+  STATE.current.secVI = [
+    ...pick(BANK.secVI_aff, 2).map(x => ({ ...x, kind: "aff" })),
+    ...pick(BANK.secVI_neg, 2).map(x => ({ ...x, kind: "neg" })),
+    ...pick(BANK.secVI_q, 1).map(x => ({ ...x, kind: "q" }))
+  ];
+  const s7_1 = pick(BANK.secVII.filter(x => x.type === 1), 4);
+  const s7_2 = pick(BANK.secVII.filter(x => x.type === 2), 1);
+  STATE.current.secVII = [...s7_1.slice(0, 3), s7_2[0], s7_1[3]];
+
+  STATE.current.secVIII = [
+    ...pick(BANK.secVIII_prac, 3),
+    BANK.secVIII_theo[0],
+    BANK.secVIII_theo[1]
+  ];
+
+  STATE.current.secIX = pick(BANK.secIX, 5);
+  STATE.current.secX = pick(BANK.secX, 5);
+  STATE.current.secXI = pick(BANK.secXI, 5);
+  STATE.current.secXII = [
+    ...pick(BANK.secXII_zero, 3),
+    ...pick(BANK.secXII_first, 3)
+  ];
+  STATE.current.reading = pick(BANK.secXIII_readings, 1)[0];
+  STATE.current.open = pick(BANK.secXIII_open, 5);
+
+  renderAllSections();
+  renderVerbSection();
+  updateBadges();
+}
+
+function renderAllSections() {
+  // ---------------- SECTION I (6 pts) ----------------
+  const secI = document.getElementById("sec-I");
+  secI.innerHTML = `
+    <div class="sec-h">Section I. Correct the sentences. Rewrite the sentences in the blanks on the right. (6 points - 1 pt each)<span class="sec-score" data-sec="I"></span></div>
+    ${STATE.current.secI.map((it, idx) => {
+      const id = `s1_${idx}`;
+      STATE.tasks.push({
+        sec: "I", pts: 1, id,
+        grade: () => {
+          const inp = document.getElementById(id);
+          const ok = matchAnswer(inp.value, it.a);
+          return { ok, inputs: [inp], ans: it.a[0] + ".", rule: it.rule };
+        }
+      });
+      return `
+        <div class="item row2" id="wrap_${id}">
+          <span class="mark"></span><span class="ded">-1</span>
+          <div class="q"><span class="n">${idx + 1}.</span> ${it.q}</div>
+          <div class="a"><input id="${id}" class="blank full" type="text" autocomplete="off" spellcheck="false"></div>
+          <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+          <div class="key">Key: ${it.a[0]}.</div>
+        </div>`;
+    }).join("")}
+  `;
+
+  // ---------------- SECTION II (6 pts) ----------------
+  const secII = document.getElementById("sec-II");
+  secII.innerHTML = `
+    <div class="sec-h">Section II. Rewrite these sentences about Anna / John using the third person. (6 points - 1 pt each)<span class="sec-score" data-sec="II"></span></div>
+    ${STATE.current.secII.map((it, idx) => {
+      const id = `s2_${idx}`;
+      const fullTargets = it.a.map(x => `${it.lead} ${x}`);
+      const allAccepted = [...it.a, ...fullTargets];
+      STATE.tasks.push({
+        sec: "II", pts: 1, id,
+        grade: () => {
+          const inp = document.getElementById(id);
+          const ok = matchAnswer(inp.value, allAccepted);
+          let warn = it.rule;
+          if (!ok && /\bmy\b/i.test(inp.value)) {
+            warn = "¡Perdiste el punto por no cambiar 'my'! En 3ª persona debes cambiar 'my' por 'her' (Anna/She) o 'his' (John/He). " + it.rule;
+          }
+          return { ok, inputs: [inp], ans: `${it.lead} ${it.a[0]}.`, rule: warn };
+        }
+      });
+      return `
+        <div class="item row2" id="wrap_${id}">
+          <span class="mark"></span><span class="ded">-1</span>
+          <div class="q"><span class="n">${idx + 1}.</span> ${it.q}</div>
+          <div class="a"><span class="lead">${it.lead}</span><input id="${id}" class="blank grow" type="text" autocomplete="off" spellcheck="false"></div>
+          <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+          <div class="key">Key: ${it.lead} ${it.a[0]}.</div>
+        </div>`;
+    }).join("")}
+  `;
+
+  // ---------------- SECTION III (6 pts) ----------------
+  const secIII = document.getElementById("sec-III");
+  secIII.innerHTML = `
+    <div class="sec-h">Section III. Change the (positive sentences into negatives) and (the negative sentences into positives). (6 points - 1 pt each)<span class="sec-score" data-sec="III"></span></div>
+    ${STATE.current.secIII.map((it, idx) => {
+      const id = `s3_${idx}`;
+      STATE.tasks.push({
+        sec: "III", pts: 1, id,
+        grade: () => {
+          const inp = document.getElementById(id);
+          const ok = matchAnswer(inp.value, it.a);
+          return { ok, inputs: [inp], ans: it.a[0] + ".", rule: it.rule };
+        }
+      });
+      return `
+        <div class="item row2" id="wrap_${id}">
+          <span class="mark"></span><span class="ded">-1</span>
+          <div class="q"><span class="n">${idx + 1}.</span> ${it.q}</div>
+          <div class="a"><input id="${id}" class="blank full" type="text" autocomplete="off" spellcheck="false"></div>
+          <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+          <div class="key">Key: ${it.a[0]}.</div>
+        </div>`;
+    }).join("")}
+  `;
+
+  // ---------------- SECTION IV (12 pts: 8 chart + 4 sentences) ----------------
+  const secIV = document.getElementById("sec-IV");
+  const colNames = ["Subject Pronoun", "Object Pronoun", "Possessive Adjective", "Possessive Pronoun"];
+  const blankCols = [1, 2, 3, 2, 3, 1, 3, 2].map(c => (c + Math.floor(Math.random() * 3)) % 4);
+
+  let chartRowsHtml = "";
+  BANK.secIV_rows.forEach((row, rIdx) => {
+    const bCol = blankCols[rIdx];
+    const id = `s4_a_${rIdx}`;
+    const expectedRaw = row[bCol].replace(/\s*\(plural\)/i, "");
+    const accepted = bCol === 0 && rIdx === 6 ? ["you", "you (plural)"] : [expectedRaw];
+    STATE.tasks.push({
+      sec: "IV", pts: 1, id,
+      grade: () => {
+        const inp = document.getElementById(id);
+        const ok = matchAnswer(inp.value, accepted);
+        return {
+          ok, inputs: [inp],
+          ans: `(${rIdx + 1}) ${expectedRaw}`,
+          rule: `Fila "${row[0]}" → columna ${colNames[bCol]} es "${expectedRaw}".`
+        };
+      }
+    });
+
+    const tds = row.map((val, cIdx) => {
+      if (cIdx === bCol) {
+        return `<td class="cell item" id="wrap_${id}">
+          <span class="cn">(${rIdx + 1})</span>
+          <span class="mark"></span><span class="ded">-1</span>
+          <input id="${id}" class="blank" type="text" autocomplete="off" spellcheck="false">
+          <div class="key">${expectedRaw}</div>
+        </td>`;
+      }
+      return `<td>${val}</td>`;
+    }).join("");
+    chartRowsHtml += `<tr>${tds}</tr>`;
+  });
+
+  const partBHtml = STATE.current.secIV_B.map((it, idx) => {
+    const id = `s4_b_${idx}`;
+    return renderChoiceItem({
+      sec: "IV", pts: 1, id, num: idx + 1,
+      s: it.s, opts: it.opts, a: it.a, rule: it.rule, inlineOpts: true
+    });
+  }).join("");
+
+  secIV.innerHTML = `
+    <div class="sec-h">Section IV. Write the Personal and Possessive Pronouns in the chart below, and complete the sentences. (12 points)<span class="sec-score" data-sec="IV"></span></div>
+    <div class="sub-h">Part A. Complete the missing pronouns (1) to (8) in the chart. (8 points - 1 pt each)</div>
+    <table class="chart">
+      <thead><tr><th>Subject Pronoun</th><th>Object Pronoun</th><th>Possessive Adjective</th><th>Possessive Pronoun</th></tr></thead>
+      <tbody>${chartRowsHtml}</tbody>
+    </table>
+    <div id="notes-IV" class="sec-notes"></div>
+    <div class="sub-h">Part B. Choose or write the correct pronoun from the parentheses. (4 points - 1 pt each)</div>
+    ${partBHtml}
+  `;
+
+  // ---------------- SECTION V (10 pts) ----------------
+  const secV = document.getElementById("sec-V");
+  secV.innerHTML = `
+    <div class="sec-h">Section V. Fill in the blanks with the right verb (to be) and (gerund) to form the Present Progressive in the following sentences. (10 points - 1 pt each)<span class="sec-score" data-sec="V"></span></div>
+    <div class="example"><b>Example:</b> Alice <u>is</u> <u>playing</u> tennis in the park now. <b>(play)</b></div>
+    ${STATE.current.secV.map((it, idx) => {
+      const id = `s5_${idx}`;
+      STATE.tasks.push({
+        sec: "V", pts: 1, id,
+        grade: () => {
+          const i1 = document.getElementById(`${id}_1`);
+          const i2 = document.getElementById(`${id}_2`);
+          const ok1 = matchAnswer(i1.value, it.a1);
+          const ok2 = matchAnswer(i2.value, it.a2);
+          let customRule = it.rule;
+          if (!ok2 && VERB_MAP[it.v]) {
+            customRule = diagnoseVerbError(VERB_MAP[it.v], "ger", i2.value) + " (" + it.rule + ")";
+          }
+          return {
+            ok: ok1 && ok2,
+            inputs: [i1, i2],
+            badInputs: [...(!ok1 ? [i1] : []), ...(!ok2 ? [i2] : [])],
+            ans: `${it.a1[0]} ${it.a2[0]}`,
+            rule: customRule
+          };
+        }
+      });
+      return `
+        <div class="item line" id="wrap_${id}">
+          <span class="mark"></span><span class="ded">-1</span>
+          <div class="txt"><span class="n">${idx + 1}.</span> ${it.s[0]}<input id="${id}_1" class="blank" style="width:62px" type="text" autocomplete="off" spellcheck="false"> <input id="${id}_2" class="blank" style="width:125px" type="text" autocomplete="off" spellcheck="false">${it.s[2]}</div>
+          <span class="vb">(${it.v})</span>
+          <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+          <div class="key">Key: ${it.a1[0]} ${it.a2[0]}</div>
+        </div>`;
+    }).join("")}
+  `;
+
+  // ---------------- SECTION VI (10 pts - 2 pts each) ----------------
+  const secVI = document.getElementById("sec-VI");
+  secVI.innerHTML = `
+    <div class="sec-h">Section VI. Past Simple Exercises: Complete and transform the sentences in Simple Past. (10 points - 2 pts each)<span class="sec-score" data-sec="VI"></span></div>
+    ${STATE.current.secVI.map((it, idx) => {
+      const id = `s6_${idx}`;
+      if (it.kind === "aff") {
+        STATE.tasks.push({
+          sec: "VI", pts: 2, id,
+          grade: () => {
+            const inp = document.getElementById(id);
+            const ok = matchAnswer(inp.value, it.a);
+            return { ok, inputs: [inp], ans: it.a[0], rule: it.rule };
+          }
+        });
+        return `
+          <div class="item line" id="wrap_${id}">
+            <span class="mark"></span><span class="ded">-2</span>
+            <div class="txt"><span class="n">${idx + 1}.</span> ${it.s[0]}<input id="${id}" class="blank" style="width:130px" type="text" autocomplete="off" spellcheck="false">${it.s[1]}</div>
+            <span class="vb">(${it.v})</span>
+            <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+            <div class="key">Key: ${it.a[0]}</div>
+          </div>`;
+      } else {
+        STATE.tasks.push({
+          sec: "VI", pts: 2, id,
+          grade: () => {
+            const i1 = document.getElementById(`${id}_1`);
+            const i2 = document.getElementById(`${id}_2`);
+            const ok1 = matchAnswer(i1.value, it.a1);
+            const ok2 = matchAnswer(i2.value, it.a2);
+            return {
+              ok: ok1 && ok2,
+              inputs: [i1, i2],
+              badInputs: [...(!ok1 ? [i1] : []), ...(!ok2 ? [i2] : [])],
+              ans: `${it.a1[0]} / ${it.a2[0]}`,
+              rule: it.rule
+            };
+          }
+        });
+        return `
+          <div class="item line" id="wrap_${id}">
+            <span class="mark"></span><span class="ded">-2</span>
+            <div class="txt"><span class="n">${idx + 1}.</span> ${it.s[0]}<input id="${id}_1" class="blank" style="width:88px" type="text" autocomplete="off" spellcheck="false">${it.s[1]}<input id="${id}_2" class="blank" style="width:110px" type="text" autocomplete="off" spellcheck="false">${it.s[2]}</div>
+            <span class="vb">(${it.v})</span>
+            <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+            <div class="key">Key: ${it.a1[0]} ... ${it.a2[0]}</div>
+          </div>`;
+      }
+    }).join("")}
+  `;
+
+  // ---------------- SECTION VII (10 pts - 2 pts each) ----------------
+  const secVII = document.getElementById("sec-VII");
+  secVII.innerHTML = `
+    <div class="sec-h">Section VII. Write the sentences with the correct form of the verb in parentheses. Past Simple vs. Past Progressive (10 points - 2 pts each)<span class="sec-score" data-sec="VII"></span></div>
+    ${STATE.current.secVII.map((it, idx) => {
+      const id = `s7_${idx}`;
+      if (it.type === 1) {
+        STATE.tasks.push({
+          sec: "VII", pts: 2, id,
+          grade: () => {
+            const inp = document.getElementById(id);
+            const ok = matchAnswer(inp.value, it.a);
+            return { ok, inputs: [inp], ans: it.a[0], rule: it.rule };
+          }
+        });
+        return `
+          <div class="item line" id="wrap_${id}">
+            <span class="mark"></span><span class="ded">-2</span>
+            <div class="txt"><span class="n">${idx + 1}.</span> ${it.s[0]}<input id="${id}" class="blank" style="width:165px" type="text" autocomplete="off" spellcheck="false">${it.s[1]}</div>
+            <span class="vb">(${it.v})</span>
+            <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+            <div class="key">Key: ${it.a[0]}</div>
+          </div>`;
+      } else {
+        STATE.tasks.push({
+          sec: "VII", pts: 2, id,
+          grade: () => {
+            const i1 = document.getElementById(`${id}_1`);
+            const i2 = document.getElementById(`${id}_2`);
+            const ok1 = matchAnswer(i1.value, it.a1);
+            const ok2 = matchAnswer(i2.value, it.a2);
+            return {
+              ok: ok1 && ok2,
+              inputs: [i1, i2],
+              badInputs: [...(!ok1 ? [i1] : []), ...(!ok2 ? [i2] : [])],
+              ans: `${it.a1[0]} / ${it.a2[0]}`,
+              rule: it.rule
+            };
+          }
+        });
+        return `
+          <div class="item line" id="wrap_${id}">
+            <span class="mark"></span><span class="ded">-2</span>
+            <div class="txt"><span class="n">${idx + 1}.</span> ${it.s[0]}<input id="${id}_1" class="blank" style="width:74px" type="text" autocomplete="off" spellcheck="false">${it.s[1]}<input id="${id}_2" class="blank" style="width:120px" type="text" autocomplete="off" spellcheck="false">${it.s[2]}</div>
+            <span class="vb">(${it.v})</span>
+            <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+            <div class="key">Key: ${it.a1[0]} / ${it.a2[0]}</div>
+          </div>`;
+      }
+    }).join("")}
+  `;
+
+  // ---------------- SECTION VIII (10 pts - 2 pts each) ----------------
+  const secVIII = document.getElementById("sec-VIII");
+  secVIII.innerHTML = `
+    <div class="sec-h">Section VIII. Write the correct answer in the blanks from the options below. (10 points - 2 pts each)<span class="sec-score" data-sec="VIII"></span></div>
+    ${STATE.current.secVIII.map((it, idx) => renderChoiceItem({
+      sec: "VIII", pts: 2, id: `s8_${idx}`, num: idx + 1,
+      s: it.s, opts: it.opts, a: it.a, rule: it.rule, inlineOpts: false
+    })).join("")}
+  `;
+
+  // ---------------- SECTION IX (10 pts - 2 pts each) ----------------
+  const secIX = document.getElementById("sec-IX");
+  secIX.innerHTML = `
+    <div class="sec-h">Section IX. Present Perfect: Write to complete the sentences using the Present Perfect. Conjugate the verb on the right. (10 points - 2 pts each)<span class="sec-score" data-sec="IX"></span></div>
+    ${STATE.current.secIX.map((it, idx) => {
+      const id = `s9_${idx}`;
+      STATE.tasks.push({
+        sec: "IX", pts: 2, id,
+        grade: () => {
+          const i1 = document.getElementById(`${id}_1`);
+          const i2 = document.getElementById(`${id}_2`);
+          const ok1 = matchAnswer(i1.value, it.a1);
+          const ok2 = matchAnswer(i2.value, it.a2);
+          return {
+            ok: ok1 && ok2,
+            inputs: [i1, i2],
+            badInputs: [...(!ok1 ? [i1] : []), ...(!ok2 ? [i2] : [])],
+            ans: `${it.a1[0]} ... ${it.a2[0]}`,
+            rule: it.rule
+          };
+        }
+      });
+      return `
+        <div class="item line" id="wrap_${id}">
+          <span class="mark"></span><span class="ded">-2</span>
+          <div class="txt"><span class="n">${idx + 1}.</span> ${it.s[0]}<input id="${id}_1" class="blank" style="width:74px" type="text" autocomplete="off" spellcheck="false">${it.s[1]}<input id="${id}_2" class="blank" style="width:120px" type="text" autocomplete="off" spellcheck="false">${it.s[2]}</div>
+          <span class="vb">(${it.v})</span>
+          <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+          <div class="key">Key: ${it.a1[0]} / ${it.a2[0]}</div>
+        </div>`;
+    }).join("")}
+  `;
+
+  // ---------------- SECTION X (10 pts - 2 pts each) ----------------
+  const secX = document.getElementById("sec-X");
+  secX.innerHTML = `
+    <div class="sec-h">Section X. Write the correct word to complete the sentence. (10 points - 2 pts each)<span class="sec-score" data-sec="X"></span></div>
+    <div class="wordbank">( ever / never / for / since / already / yet )</div>
+    ${STATE.current.secX.map((it, idx) => {
+      const id = `s10_${idx}`;
+      STATE.tasks.push({
+        sec: "X", pts: 2, id,
+        grade: () => {
+          const inp = document.getElementById(id);
+          const ok = matchAnswer(inp.value, it.a);
+          return { ok, inputs: [inp], ans: it.a[0], rule: it.rule };
+        }
+      });
+      return `
+        <div class="item line" id="wrap_${id}">
+          <span class="mark"></span><span class="ded">-2</span>
+          <div class="txt"><span class="n">${idx + 1}.</span> ${it.s[0]}<input id="${id}" class="blank" style="width:105px" type="text" autocomplete="off" spellcheck="false">${it.s[1]}</div>
+          <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+          <div class="key">Key: ${it.a[0]}</div>
+        </div>`;
+    }).join("")}
+  `;
+
+  // ---------------- SECTION XI (10 pts - 2 pts each) ----------------
+  const secXI = document.getElementById("sec-XI");
+  secXI.innerHTML = `
+    <div class="sec-h">Section XI. Present Perfect vs. Simple Past: Write the correct form of the verb. (10 points - 2 pts each)<span class="sec-score" data-sec="XI"></span></div>
+    ${STATE.current.secXI.map((it, idx) => renderChoiceItem({
+      sec: "XI", pts: 2, id: `s11_${idx}`, num: idx + 1,
+      s: it.s, opts: it.opts, a: it.a, rule: it.rule, inlineOpts: true
+    })).join("")}
+  `;
+
+  // ---------------- SECTION XII (12 pts - 2 pts each) ----------------
+  const secXII = document.getElementById("sec-XII");
+  secXII.innerHTML = `
+    <div class="sec-h">Section XII. Zero Conditional vs. First Conditional. Complete the sentences with the correct form of the verbs. (12 points - 2 pts each)<span class="sec-score" data-sec="XII"></span></div>
+    ${STATE.current.secXII.map((it, idx) => {
+      const id = `s12_${idx}`;
+      STATE.tasks.push({
+        sec: "XII", pts: 2, id,
+        grade: () => {
+          const inp = document.getElementById(id);
+          const ok = matchAnswer(inp.value, it.a);
+          return { ok, inputs: [inp], ans: it.a[0], rule: it.rule };
+        }
+      });
+      return `
+        <div class="item line" id="wrap_${id}">
+          <span class="mark"></span><span class="ded">-2</span>
+          <div class="txt"><span class="n">${idx + 1}.</span> ${it.s[0]}<input id="${id}" class="blank" style="width:145px" type="text" autocomplete="off" spellcheck="false">${it.s[1]}</div>
+          <span class="vb">(${it.v})</span>
+          <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+          <div class="key">Key: ${it.a[0]}</div>
+        </div>`;
+    }).join("")}
+  `;
+
+  // ---------------- SECTION XIII (14 pts: 4 Reading + 10 General Open) ----------------
+  const secXIII = document.getElementById("sec-XIII");
+  const rd = STATE.current.reading;
+  const rdHtml = rd.qs.map((qObj, idx) => {
+    const id = `s13_a_${idx}`;
+    STATE.tasks.push({
+      sec: "XIII", pts: 1, id,
+      grade: () => {
+        const inp = document.getElementById(id);
+        const val = expandContractions(norm(inp.value));
+        const ok = qObj.rx.test(val) && val.split(" ").length >= 3;
+        return { ok, inputs: [inp], ans: qObj.sample, rule: qObj.rule };
+      }
+    });
+    return `
+      <div class="item open" id="wrap_${id}">
+        <span class="mark"></span><span class="ded">-1</span>
+        <div><span class="n">${idx + 1}.</span> ${qObj.q}</div>
+        <input id="${id}" class="blank full" type="text" autocomplete="off" spellcheck="false">
+        <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+        <div class="key">Sample Answer: ${qObj.sample}</div>
+      </div>`;
+  }).join("");
+
+  const openHtml = STATE.current.open.map((qObj, idx) => {
+    const id = `s13_b_${idx}`;
+    STATE.tasks.push({
+      sec: "XIII", pts: 2, id,
+      grade: () => {
+        const inp = document.getElementById(id);
+        const val = expandContractions(norm(inp.value));
+        const ok = qObj.rx.test(val) && val.split(" ").length >= 3;
+        return { ok, inputs: [inp], ans: qObj.sample, rule: qObj.rule };
+      }
+    });
+    return `
+      <div class="item open" id="wrap_${id}">
+        <span class="mark"></span><span class="ded">-2</span>
+        <div><span class="n">${idx + 1}.</span> ${qObj.q}</div>
+        <input id="${id}" class="blank full" type="text" autocomplete="off" spellcheck="false">
+        <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+        <div class="key">Sample Answer: ${qObj.sample}</div>
+      </div>`;
+  }).join("");
+
+  secXIII.innerHTML = `
+    <div class="sec-h">Section XIII. Reading Comprehension &amp; Complete Answers (14 points)<span class="sec-score" data-sec="XIII"></span></div>
+    <div class="sub-h">Part A. Read the text and answer the questions giving complete answers (SUBJECT + VERB + COMPLEMENT). (4 points - 1 pt each)</div>
+    <div class="reading">${rd.text}</div>
+    ${rdHtml}
+    <div class="sub-h" style="margin-top:10px">Part B. Answer the following questions giving complete answers (SUBJECT + VERB + COMPLEMENT). (10 points - 2 pts each)</div>
+    <div class="example"><b>Example:</b> What is Alice doing now? <u>She is taking an English test now.</u></div>
+    ${openHtml}
+  `;
+}
+
+function renderChoiceItem({ sec, pts, id, num, s, opts, a, rule, inlineOpts }) {
+  STATE.tasks.push({
+    sec, pts, id,
+    grade: () => {
+      const inp = document.getElementById(id);
+      const ok = matchAnswer(inp.value, [a]);
+      return { ok, inputs: [inp], ans: a, rule };
+    }
+  });
+  const optsHtml = `<span class="opts">( ${opts.map(o => `<button type="button" class="opt" data-target="${id}" data-val="${o}">${o}</button>`).join(" / ")} )</span>`;
+  return `
+    <div class="item" id="wrap_${id}">
+      <span class="mark"></span><span class="ded">-${pts}</span>
+      <div><span class="n">${num}.</span> ${s[0]}<input id="${id}" class="blank" style="width:${Math.max(125, a.length * 9)}px" type="text" autocomplete="off" spellcheck="false">${s[1]} ${inlineOpts ? optsHtml : ""}</div>
+      ${!inlineOpts ? `<div class="opts-line">${optsHtml}</div>` : ""}
+      <div class="fb"><span class="ans"></span> — <span class="rule"></span></div>
+      <div class="key">Key: ${a}</div>
+    </div>`;
+}
+
+// ---------------- SECTION XIV: TABLA DE VERBOS DE 60 PUNTOS ----------------
+function renderVerbSection() {
+  STATE.tasks = STATE.tasks.filter(t => t.sec !== "XIV");
+
+  let verbsList = [];
+  if (STATE.verbMode === "prof20") {
+    verbsList = PROF_20_ORDER.map(inf => VERB_MAP[inf]);
+  } else {
+    verbsList = pick(VERBS_60, 20);
+  }
+  STATE.current.verbs = verbsList;
+
+  const secXIV = document.getElementById("sec-XIV");
+  const modeLabel = STATE.verbMode === "prof20"
+    ? "Modo activo: los 20 verbos del profe (orden oficial)"
+    : "Modo activo: selección aleatoria (20 de 60 verbos)";
+
+  let rowsHtml = "";
+  verbsList.forEach((v, idx) => {
+    const cols = ["past", "part", "ger"];
+    const cellsHtml = cols.map(c => {
+      const id = `s14_${idx}_${c}`;
+      STATE.tasks.push({
+        sec: "XIV", pts: 1, id,
+        grade: () => {
+          const inp = document.getElementById(id);
+          const ok = matchAnswer(inp.value, v[c]);
+          return {
+            ok,
+            inputs: [inp],
+            ans: `${v.inf} → ${v[c].join(" / ")}`,
+            rule: ok ? "" : diagnoseVerbError(v, c, inp.value)
+          };
+        }
+      });
+      return `
+        <td class="cell item" id="wrap_${id}">
+          <span class="mark"></span><span class="ded">-1</span>
+          <input id="${id}" class="blank" type="text" autocomplete="off" spellcheck="false">
+          <div class="key">${v[c][0]}</div>
+        </td>`;
+    }).join("");
+
+    rowsHtml += `
+      <tr>
+        <td class="inf">${idx + 1}. ${v.inf}</td>
+        ${cellsHtml}
+      </tr>`;
+  });
+
+  secXIV.innerHTML = `
+    <div class="sec-h">Section XIV. Classify and write the following verbs according to their tense action. (60 points - 1 pt per cell)<span class="sec-score" data-sec="XIV"></span></div>
+    <div class="mode-tag">${modeLabel}</div>
+    <table class="chart vt">
+      <thead>
+        <tr>
+          <th style="width:25%">Infinitive</th>
+          <th style="width:25%">Past Simple</th>
+          <th style="width:25%">Past Participle</th>
+          <th style="width:25%">Gerund (-ing)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="example">
+          <td class="inf">Example: eat</td>
+          <td>ate</td>
+          <td>eaten</td>
+          <td>eating</td>
+        </tr>
+        ${rowsHtml}
+      </tbody>
+    </table>
+    <div id="notes-XIV" class="sec-notes"></div>
+  `;
+  updateBadges();
+  paginate();
+}
+
+// =========================================================================
+// MOTOR DE CALIFICACIÓN Y RETROALIMENTACIÓN ESTILO PROFESOR
+// =========================================================================
+function gradeExam() {
+  const secTotals = {};
+  const secNotes = { IV: [], XIV: [] };
+  let earned = 0;
+  let total = 0;
+
+  STATE.tasks.forEach(t => {
+    if (!secTotals[t.sec]) secTotals[t.sec] = { e: 0, m: 0 };
+    secTotals[t.sec].m += t.pts;
+    total += t.pts;
+
+    const res = t.grade();
+    const wrap = document.getElementById(`wrap_${t.id}`);
+    const mark = wrap.querySelector(".mark");
+    res.inputs.forEach(inp => inp.classList.remove("bad"));
+
+    wrap.classList.add("graded");
+    if (res.ok) {
+      secTotals[t.sec].e += t.pts;
+      earned += t.pts;
+      wrap.classList.remove("wrong");
+      wrap.classList.add("right");
+      mark.textContent = "✓";
+    } else {
+      wrap.classList.remove("right");
+      wrap.classList.add("wrong");
+      mark.textContent = "✗";
+      const bads = res.badInputs || res.inputs;
+      bads.forEach(inp => inp.classList.add("bad"));
+
+      const fb = wrap.querySelector(".fb");
+      if (fb) {
+        fb.querySelector(".ans").textContent = res.ans;
+        fb.querySelector(".rule").textContent = res.rule;
+      } else if (secNotes[t.sec]) {
+        secNotes[t.sec].push(`• ${res.ans} — ${res.rule}`);
+      }
+    }
+  });
+
+  document.querySelectorAll(".sec-score").forEach(el => {
+    const s = el.getAttribute("data-sec");
+    if (secTotals[s]) {
+      el.textContent = `${secTotals[s].e}/${secTotals[s].m}`;
+    }
+  });
+
+  ["IV", "XIV"].forEach(s => {
+    const box = document.getElementById(`notes-${s}`);
+    if (!box) return;
+    if (secNotes[s].length) {
+      box.innerHTML = `<b>Correcciones del profesor en la tabla (Sección ${s}):</b><br>` + secNotes[s].slice(0, 12).join("<br>") + (secNotes[s].length > 12 ? `<br><i>...y ${secNotes[s].length - 12} correcciones más (pulsa "Ver respuestas" para ver cada celda).</i>` : "");
+      box.classList.add("on");
+    } else {
+      box.classList.remove("on");
+      box.innerHTML = "";
+    }
+  });
+
+  const pct = ((earned / total) * 100).toFixed(2);
+  const gradeBox = document.getElementById("grade");
+  gradeBox.innerHTML = `${earned} / ${total} = ${pct}%<small>Checked by Prof. Cruz Raúl G.C.</small>`;
+
+  document.body.classList.add("graded-on");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  toast(`Calificación final: ${earned} / ${total} = ${pct}%`);
+}
+
+// =========================================================================
+// FILTRO DE MODO ESTUDIO E INTERACCIONES
+// =========================================================================
+const FILTER_OPTIONS = [
+  { val: "ALL", label: "Examen completo" },
+  { val: "P1", label: "Present Simple y To Be (Secciones I–III)" },
+  { val: "P2", label: "Pronombres y Present Progressive (Secciones IV–V)" },
+  { val: "P3", label: "Past Simple y Past Progressive (Secciones VI–VIII)" },
+  { val: "P4", label: "Present Perfect (Secciones IX–XI)" },
+  { val: "P5", label: "Condicionales y Reading (Secciones XII–XIII)" },
+  { val: "P6", label: "Tabla de verbos (Sección XIV)" }
+];
+
+function applyFilter(val) {
+  PAG.filter = val;
+  paginate();
+}
+
+function updateBadges() {
+  document.getElementById("badgeExam").textContent = `Versión #${STATE.examSeed}`;
+  document.getElementById("badgeVerbs").textContent = STATE.verbMode === "prof20" ? "Verbos: 20 del profe" : "Verbos: 20 al azar";
+}
+
+function init() {
+  const now = new Date();
+  document.getElementById("today").textContent = now.toLocaleDateString("en-US", {
+    year: "numeric", month: "long", day: "2-digit"
+  });
+
+  const sel = document.getElementById("filter");
+  sel.innerHTML = FILTER_OPTIONS.map(o => `<option value="${o.val}">${o.label}</option>`).join("");
+  sel.addEventListener("change", e => applyFilter(e.target.value));
+
+  document.getElementById("exam").addEventListener("click", e => {
+    const btn = e.target.closest(".opt");
+    if (!btn) return;
+    const targetId = btn.getAttribute("data-target");
+    const val = btn.getAttribute("data-val");
+    const inp = document.getElementById(targetId);
+    if (inp) {
+      inp.value = val;
+      inp.classList.remove("bad");
+    }
+    btn.parentElement.querySelectorAll(".opt").forEach(b => b.classList.toggle("sel", b === btn));
+  });
+
+  document.getElementById("btnGen").addEventListener("click", () => {
+    STATE.examSeed++;
+    buildExam();
+    toast("Nuevo examen generado.");
+  });
+
+  document.getElementById("btnGrade").addEventListener("click", gradeExam);
+
+  document.getElementById("btnKey").addEventListener("click", e => {
+    const on = document.body.classList.toggle("show-key");
+    e.currentTarget.classList.toggle("on", on);
+    e.currentTarget.textContent = on ? "Ocultar respuestas" : "Ver respuestas";
+  });
+
+  document.getElementById("btnPrint").addEventListener("click", () => window.print());
+
+  document.getElementById("btnClear").addEventListener("click", () => {
+    document.querySelectorAll("input.blank").forEach(i => { i.value = ""; i.classList.remove("bad"); });
+    document.querySelectorAll(".opt.sel").forEach(b => b.classList.remove("sel"));
+    document.querySelectorAll(".item.graded").forEach(w => w.classList.remove("graded", "wrong", "right"));
+    document.querySelectorAll(".sec-notes").forEach(n => { n.classList.remove("on"); n.innerHTML = ""; });
+    document.body.classList.remove("graded-on", "show-key");
+    document.getElementById("btnKey").classList.remove("on");
+    document.getElementById("btnKey").textContent = "Ver respuestas";
+    toast("Respuestas borradas.");
+  });
+
+  buildExam();
+  setupExtras();
+}
+
+// =========================================================================
+// PAGINACION DINAMICA: las secciones se acomodan una tras otra y el numero
+// de hojas depende del contenido. El espacio sobrante de cada hoja se reparte
+// entre todos los renglones (no solo entre secciones).
+// =========================================================================
+const SEC_ROMANS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV"];
+const FILTER_GROUPS = {
+  P1: ["I", "II", "III"], P2: ["IV", "V"], P3: ["VI", "VII", "VIII"],
+  P4: ["IX", "X", "XI"], P5: ["XII", "XIII"], P6: ["XIV"]
+};
+const PAGE_LIMIT = 1056;   // 11 pulgadas en px CSS
+const STRETCH_MAX = 22;    // maximo de aire extra por renglon (px)
+const PAG = { filter: "ALL", dirty: false };
+
+function pageBottom(p) {
+  const last = p.secs[p.secs.length - 1];
+  return last.getBoundingClientRect().bottom - p.el.getBoundingClientRect().top
+    + parseFloat(getComputedStyle(p.el).paddingBottom);
+}
+
+function stretchPage(p) {
+  const N = p.el.querySelectorAll(".sec > .item").length
+    + p.el.querySelectorAll("table.chart tr").length
+    + 2 * p.secs.length;
+  if (!N) return;
+  let ix = 0;
+  for (let k = 0; k < 6; k++) {
+    const slack = PAGE_LIMIT - 6 - pageBottom(p);
+    if (Math.abs(slack) < 2) break;
+    ix = Math.max(0, Math.min(STRETCH_MAX, ix + slack / N));
+    p.el.style.setProperty("--ix", ix.toFixed(2) + "px");
+  }
+}
+
+function paginate() {
+  const main = document.getElementById("exam");
+  const holder = document.getElementById("secHolder");
+  const head = document.getElementById("pageHead");
+  if (!main || !holder || !head) return;
+  if (main.classList.contains("hidden")) { PAG.dirty = true; return; }
+  PAG.dirty = false;
+  const mobile = window.innerWidth <= 860;
+
+  holder.appendChild(head);
+  SEC_ROMANS.forEach(r => holder.appendChild(document.getElementById("sec-" + r)));
+  main.innerHTML = "";
+
+  const romans = PAG.filter === "ALL" ? SEC_ROMANS : (FILTER_GROUPS[PAG.filter] || SEC_ROMANS);
+  const pages = [];
+  const newPage = () => {
+    const el = document.createElement("section");
+    el.className = "page";
+    main.appendChild(el);
+    const p = { el, secs: [] };
+    pages.push(p);
+    return p;
+  };
+
+  let cur = newPage();
+  cur.el.appendChild(head);
+  romans.forEach(r => {
+    const sec = document.getElementById("sec-" + r);
+    cur.el.appendChild(sec);
+    cur.secs.push(sec);
+    if (!mobile && cur.secs.length > 1 && pageBottom(cur) + 4 > PAGE_LIMIT) {
+      cur.el.removeChild(sec);
+      cur.secs.pop();
+      cur = newPage();
+      cur.el.appendChild(sec);
+      cur.secs.push(sec);
+    }
+  });
+
+  pages.forEach((p, i) => {
+    const first = p.secs[0].id.replace("sec-", "");
+    const last = p.secs[p.secs.length - 1].id.replace("sec-", "");
+    if (i > 0) {
+      const rh = document.createElement("div");
+      rh.className = "run-head";
+      rh.innerHTML = `<span>Written Test - Comprehensive Exam Simulator</span><span>${first === last ? "Section " + first : "Sections " + first + " - " + last}</span>`;
+      p.el.insertBefore(rh, p.el.firstChild);
+    }
+    if (!mobile) stretchPage(p);
+    const ft = document.createElement("div");
+    ft.className = "page-footer";
+    ft.innerHTML = `<span>Prof. Cruz Raúl García Coronado · English 311B</span><span>Page ${i + 1} of ${pages.length}</span>`;
+    p.el.appendChild(ft);
+  });
+}
+
+// =========================================================================
+// MAPA DE ESTUDIO (temario del examen)
+// =========================================================================
+const LANES = [
+  { id: "base", label: "Base", note: "Se usa en todos los tiempos" },
+  { id: "present", label: "Presente", note: "Ahora, hábitos y hechos" },
+  { id: "past", label: "Pasado", note: "Lo que ya terminó" },
+  { id: "bridge", label: "Pasado hasta hoy", note: "Conecta pasado y presente" },
+  { id: "cond", label: "Condicionales", note: "Si pasa X, pasa Y" }
+];
+
+const STUDY = [
+  {
+    id: "tobe", lane: "base", name: "Verbo To Be", short: "am / is / are · was / were", page: "P1", tl: null,
+    blocks: [
+      { t: "use", h: "Para qué se usa", items: [
+        "Decir quién eres, cómo eres, dónde estás, tu edad y tu origen: <b>She is 16</b>, <b>We are at home</b>.",
+        "<b>am / is / are</b> hablan del presente. <b>was / were</b> hablan del pasado.",
+        "<b>was / were</b> es la única excepción del pasado simple: NO usa <code>did</code>."
+      ] },
+      { t: "table", h: "Qué forma va con cada pronombre", head: ["Pronombre", "Presente", "Pasado"], rows: [
+        ["I", "am", "was"],
+        ["He / She / It", "is", "was"],
+        ["You / We / They", "are", "were"]
+      ] },
+      { t: "tip", text: "<b>was</b> va con I, he, she, it (singular). <b>were</b> va con you, we, they (plural) y con <b>you</b> siempre, aunque hables con una sola persona." },
+      { t: "form", h: "Cómo se forma", rows: [
+        ["Afirmativo", "sujeto + am/is/are/was/were", "I was at home."],
+        ["Negativo", "+ not (isn't, aren't, wasn't, weren't)", "They weren't at school."],
+        ["Pregunta", "el verbo va antes del sujeto", "Where were you yesterday?"]
+      ] },
+      { t: "ex", h: "Ejemplos", items: [
+        ["I was born in Mexico.", "Nací en México (el nacimiento ya pasó: was, nunca am)."],
+        ["When were you born?", "¿Cuándo naciste?"],
+        ["My parents are very happy today.", "'My parents' = they, por eso are."],
+        ["Tom and I are in the same group.", "'Tom and I' = we."]
+      ] },
+      { t: "bad", h: "Errores comunes", items: [
+        ["She are 16 years old.", "She is 16 years old.", "She/He/It siempre usa is."],
+        ["You was at the party.", "You were at the party.", "You siempre usa were."],
+        ["I am born in South Africa.", "I was born in South Africa.", "Nacer es un hecho pasado."],
+        ["Where was they yesterday?", "Where were they yesterday?", "They es plural: were."]
+      ] }
+    ]
+  },
+  {
+    id: "ps", lane: "present", name: "Present Simple", short: "hábitos, rutinas y hechos", page: "P1",
+    tl: { a: 30, b: 70, cap: "Se repite siempre o es cierto en general." },
+    blocks: [
+      { t: "use", h: "Para qué se usa", items: [
+        "Hábitos y rutinas: <b>I study English every day.</b>",
+        "Hechos permanentes y verdades: <b>The museum opens at ten.</b>",
+        "Horarios: <b>The class starts at 7:00.</b>"
+      ] },
+      { t: "form", h: "Cómo se forma", rows: [
+        ["Afirmativo", "I / you / we / they + verbo<br>he / she / it + verbo + s", "They work. / She works."],
+        ["Negativo", "don't / doesn't + verbo base", "He doesn't like pizza."],
+        ["Pregunta", "Do / Does + sujeto + verbo base?", "Does she work here?"]
+      ] },
+      { t: "table", h: "Ortografía de la 3ª persona (he / she / it)", head: ["Regla", "Ejemplos"], rows: [
+        ["Normal: + s", "work → works, play → plays, clean → cleans"],
+        ["-ch, -sh, -s, -x, -o: + es", "watch → watches, finish → finishes, fix → fixes, go → goes"],
+        ["consonante + y: cambia a -ies", "study → studies, carry → carries"],
+        ["Irregular", "have → has, do → does"]
+      ] },
+      { t: "tip", text: "Si ya hay <b>does / doesn't</b>, el verbo principal pierde la -s: <b>Does she work?</b> (no 'works'). Y el negativo de has es <b>doesn't have</b>." },
+      { t: "words", h: "Palabras clave", items: [["always", "siempre"], ["usually", "usualmente"], ["often", "a menudo"], ["sometimes", "a veces"], ["never", "nunca"], ["every day", "todos los días"], ["on Sundays", "los domingos"]] },
+      { t: "ex", h: "Ejercicio típico: pasar a 3ª persona", items: [
+        ["I visit my parents. → John visits his parents.", "Agrega -s y cambia my por his."],
+        ["I wash my car. → Anna washes her car.", "-es y my por her."],
+        ["I don't like my neighbors. → Anna doesn't like her neighbors.", "don't pasa a doesn't."]
+      ] },
+      { t: "bad", h: "Errores comunes", items: [
+        ["He don't like pizza.", "He doesn't like pizza.", "He/She/It usa doesn't."],
+        ["Does she works here?", "Does she work here?", "Después de does el verbo va en base."],
+        ["Anna watchs TV.", "Anna watches TV.", "-ch lleva -es."],
+        ["She doesn't has a brother.", "She doesn't have a brother.", "Con doesn't, el verbo vuelve a have."]
+      ] }
+    ]
+  },
+  {
+    id: "prog", lane: "present", name: "Present Progressive", short: "lo que pasa ahora mismo", page: "P2",
+    tl: { a: 46, b: 54, cap: "Está ocurriendo justo ahora." },
+    blocks: [
+      { t: "use", h: "Para qué se usa", items: [
+        "Acciones que ocurren <b>ahora mismo</b>: <b>The baby is sleeping.</b>",
+        "Situaciones temporales: <b>They are taking French lessons this semester.</b>",
+        "Planes cercanos: <b>We are planning a trip next month.</b>"
+      ] },
+      { t: "form", h: "Cómo se forma", rows: [
+        ["Afirmativo", "am / is / are + verbo-ing", "She is holding a box."],
+        ["Negativo", "am not / isn't / aren't + verbo-ing", "I'm not working."],
+        ["Pregunta", "Am / Is / Are + sujeto + verbo-ing?", "What are you doing?"]
+      ] },
+      { t: "table", h: "Cómo escribir el -ing", head: ["Regla", "Ejemplos"], rows: [
+        ["Normal: + ing", "play → playing, work → working, hold → holding"],
+        ["Termina en -e: quita la e", "write → writing, dance → dancing, take → taking, come → coming"],
+        ["Consonante-vocal-consonante (1 sílaba): duplica", "run → running, sit → sitting, swim → swimming, plan → planning"],
+        ["Acento en la última sílaba: duplica", "begin → beginning"],
+        ["Termina en y: la y se queda", "study → studying"],
+        ["Doble vocal o x: NO duplica", "sleep → sleeping, relax → relaxing"]
+      ] },
+      { t: "words", h: "Palabras clave", items: [["now", "ahora"], ["right now", "ahorita"], ["at the moment", "en este momento"], ["today", "hoy"], ["this week", "esta semana"], ["Look!", "¡Mira!"], ["Listen!", "¡Escucha!"]] },
+      { t: "bad", h: "Errores comunes", items: [
+        ["She is play football.", "She is playing football.", "Siempre lleva -ing."],
+        ["They are studing.", "They are studying.", "La y no se quita."],
+        ["He is runing.", "He is running.", "run duplica la n."],
+        ["I am write an email.", "I am writing an email.", "Quita la e antes de -ing."]
+      ] }
+    ]
+  },
+  {
+    id: "pasts", lane: "past", name: "Past Simple", short: "acciones terminadas en el pasado", page: "P3",
+    tl: { a: 14, b: 28, cap: "Empezó y terminó en el pasado." },
+    blocks: [
+      { t: "use", h: "Para qué se usa", items: [
+        "Acciones terminadas en un momento concreto del pasado: <b>I saw my friend yesterday.</b>",
+        "Acciones seguidas, una tras otra: <b>She bought a laptop and went home.</b>",
+        "Personas del pasado: <b>Leonardo da Vinci painted the Mona Lisa.</b>"
+      ] },
+      { t: "form", h: "Cómo se forma (igual para todos los sujetos)", rows: [
+        ["Afirmativo", "sujeto + verbo en pasado", "We ate pizza last night."],
+        ["Negativo", "didn't + verbo base", "They didn't come to the party."],
+        ["Pregunta", "Did + sujeto + verbo base?", "Did she visit her grandparents?"],
+        ["Con Wh-", "Wh- + did + sujeto + verbo base?", "Where did they go?"]
+      ] },
+      { t: "table", h: "Regulares: cómo escribir -ed", head: ["Regla", "Ejemplos"], rows: [
+        ["Normal: + ed", "work → worked, play → played"],
+        ["Termina en e: + d", "dance → danced, love → loved"],
+        ["consonante + y: ied", "study → studied"],
+        ["Consonante-vocal-consonante: duplica", "plan → planned, stop → stopped"]
+      ] },
+      { t: "table", h: "Irregulares frecuentes del examen", head: ["Base", "Pasado"], rows: [
+        ["go", "went"], ["buy", "bought"], ["eat", "ate"], ["write", "wrote"], ["see", "saw"], ["drink", "drank"], ["begin", "began"], ["speak", "spoke"], ["come", "came"], ["take", "took"]
+      ] },
+      { t: "words", h: "Palabras clave", items: [["yesterday", "ayer"], ["last night / week / summer", "la noche / semana / verano pasado"], ["two days ago", "hace dos días"], ["in 2022", "en 2022"]] },
+      { t: "tip", text: "<b>Truco:</b> en cuanto aparece <b>did / didn't</b>, el verbo vuelve a su forma base: <b>Did she go?</b> (no 'went'), <b>She didn't come</b> (no 'came')." },
+      { t: "bad", h: "Errores comunes", items: [
+        ["Did she went to school?", "Did she go to school?", "Con Did el verbo va en base."],
+        ["He didn't slept well.", "He didn't sleep well.", "Con didn't el verbo va en base."],
+        ["She didn't had breakfast.", "She didn't have breakfast.", "Nunca didn't had."],
+        ["I buyed a phone.", "I bought a phone.", "buy es irregular."]
+      ] }
+    ]
+  },
+  {
+    id: "pastp", lane: "past", name: "Past Progressive", short: "estaba haciendo algo en el pasado", page: "P3",
+    tl: { a: 14, b: 36, x: 30, cap: "Acción larga en curso (azul) interrumpida por una corta (rojo)." },
+    blocks: [
+      { t: "use", h: "Para qué se usa", items: [
+        "Una acción en curso a una hora concreta del pasado: <b>At 8:00 p.m. yesterday, I was writing a report.</b>",
+        "Dos acciones largas al mismo tiempo (con <b>while</b>): <b>Tom was cooking while Anna was washing dishes.</b>",
+        "Una acción larga interrumpida por una corta (con <b>when</b>): <b>I was sleeping when the phone rang.</b>"
+      ] },
+      { t: "form", h: "Cómo se forma", rows: [
+        ["Afirmativo", "was / were + verbo-ing", "They were playing."],
+        ["Negativo", "wasn't / weren't + verbo-ing", "She wasn't working."],
+        ["Pregunta", "Was / Were + sujeto + verbo-ing?", "What were you doing?"]
+      ] },
+      { t: "table", h: "while vs. when", head: ["Palabra", "Qué va después", "Ejemplo"], rows: [
+        ["while", "la acción larga: Past Progressive", "While we were waiting, it started to rain."],
+        ["when", "la acción corta que interrumpe: Past Simple", "She was cooking when her husband arrived."]
+      ] },
+      { t: "tip", text: "<b>Pregunta clave:</b> ¿cuál acción ya estaba en curso? → <b>was/were + -ing</b>. ¿cuál llegó de golpe? → <b>Past Simple</b>." },
+      { t: "bad", h: "Errores comunes", items: [
+        ["While I slept, the phone rang.", "While I was sleeping, the phone rang.", "Después de while va la acción en curso."],
+        ["I was walking when I was seeing my teacher.", "I was walking when I saw my teacher.", "La acción corta va en Past Simple."],
+        ["They was sleeping.", "They were sleeping.", "They usa were."]
+      ] }
+    ]
+  },
+  {
+    id: "perf", lane: "bridge", name: "Present Perfect", short: "experiencias y lo que sigue vigente", page: "P4",
+    tl: { a: 18, b: 50, fade: true, cap: "Empezó en el pasado y llega hasta ahora (o importa ahora)." },
+    blocks: [
+      { t: "use", h: "Para qué se usa", items: [
+        "Experiencias de vida, sin decir cuándo: <b>Have you ever visited Japan?</b>",
+        "Acciones recientes con resultado en el presente: <b>I have lost my keys</b> (y no puedo entrar).",
+        "Algo que empezó en el pasado y sigue: <b>She has lived here since 2018.</b>"
+      ] },
+      { t: "form", h: "Cómo se forma", rows: [
+        ["Afirmativo", "have / has + participio", "They have finished the project."],
+        ["Negativo", "haven't / hasn't + participio", "We haven't seen that movie yet."],
+        ["Pregunta", "Have / Has + sujeto + participio?", "Has she ever eaten sushi?"]
+      ] },
+      { t: "tip", text: "<b>has</b> va con he, she, it. <b>have</b> va con I, you, we, they." },
+      { t: "table", h: "Palabras clave y dónde van", head: ["Palabra", "Significado", "Uso y posición"], rows: [
+        ["ever", "alguna vez", "En preguntas: Have you <b>ever</b> ridden a horse?"],
+        ["never", "nunca", "Con verbo afirmativo: I have <b>never</b> eaten sushi."],
+        ["already", "ya", "Afirmativo, entre have/has y el participio: She has <b>already</b> finished."],
+        ["yet", "todavía / ya", "Al final de negativos y preguntas: Have you finished <b>yet</b>?"],
+        ["for", "durante", "Duración: <b>for</b> two hours, <b>for</b> ten years"],
+        ["since", "desde", "Punto de inicio: <b>since</b> 2018, <b>since</b> last Christmas, <b>since</b> we were children"]
+      ] },
+      { t: "table", h: "Present Perfect vs. Past Simple", head: ["Present Perfect", "Past Simple"], rows: [
+        ["Sin fecha o tiempo que aún no termina: today, this month, ever, never, already, yet", "Tiempo terminado: yesterday, last night, two years ago, in 2024"],
+        ["I have called Rodrigo three times today.", "I called Rodrigo yesterday."],
+        ["Mr. Garcia has worked here since 2019.", "Leonardo da Vinci painted the Mona Lisa (ya falleció)."]
+      ] },
+      { t: "bad", h: "Errores comunes", items: [
+        ["I have drank two coffees.", "I have drunk two coffees.", "Participio de drink = drunk; drank es pasado simple."],
+        ["She has went to Europe.", "She has gone (o been) to Europe.", "Usa participio, no pasado."],
+        ["We have seen that movie last night.", "We saw that movie last night.", "Con 'last night' se usa Past Simple."],
+        ["Have you ever went there?", "Have you ever gone there?", "Participio después de have."]
+      ] },
+      { t: "tip", text: "<b>gone vs. been:</b> 'She has been to Paris' = ya fue y volvió. 'She has gone to Paris' = se fue y sigue allá." }
+    ]
+  },
+  {
+    id: "zero", lane: "cond", name: "Zero Conditional", short: "hechos y verdades generales", page: "P5",
+    tl: { a: 30, b: 70, cap: "Siempre es verdad: causa y efecto." },
+    blocks: [
+      { t: "use", h: "Para qué se usa", items: [
+        "Hechos científicos: <b>If you heat ice, it melts.</b>",
+        "Verdades generales y causa-efecto que siempre pasa: <b>If babies are hungry, they cry.</b>",
+        "'If' aquí significa casi lo mismo que 'when' (cada vez que)."
+      ] },
+      { t: "form", h: "Cómo se forma", rows: [
+        ["Estructura", "If + Present Simple, Present Simple", "If water reaches 100°C, it boils."],
+        ["Orden invertido", "Present Simple + if + Present Simple (sin coma)", "Plants die if they don't get water."],
+        ["Negativo", "don't / doesn't en la parte que corresponda", "If people don't eat, they get hungry."]
+      ] },
+      { t: "tip", text: "Ojo con la 3ª persona: <b>it melts, he burns, she cries</b>. Con they/you/we el verbo va en base: <b>they cry</b>." },
+      { t: "bad", h: "Errores comunes", items: [
+        ["If you heat ice, it will melt (como hecho general).", "If you heat ice, it melts.", "Un hecho siempre cierto no lleva will."],
+        ["If it melt...", "If it melts...", "it + verbo con -s."]
+      ] }
+    ]
+  },
+  {
+    id: "first", lane: "cond", name: "First Conditional", short: "futuro posible y su resultado", page: "P5",
+    tl: { a: 50, b: 88, cap: "Algo que puede pasar en el futuro y su consecuencia." },
+    blocks: [
+      { t: "use", h: "Para qué se usa", items: [
+        "Situaciones futuras posibles o probables: <b>If it rains tomorrow, we will stay at home.</b>",
+        "Promesas, advertencias y consecuencias: <b>If you don't hurry, you will miss the bus.</b>"
+      ] },
+      { t: "form", h: "Cómo se forma", rows: [
+        ["Estructura", "If + Present Simple, will + verbo base", "If she studies, she will pass."],
+        ["Negativo", "won't (will not) + verbo base", "They won't go if it's cold."],
+        ["Pregunta", "What will + sujeto + do if + Present Simple?", "What will you do if you lose your flight?"]
+      ] },
+      { t: "tip", text: "<b>Regla de oro:</b> después de <b>if</b> NUNCA va will. Usa Present Simple: <b>If I save money, I will buy a phone.</b>" },
+      { t: "table", h: "Zero vs. First", head: ["", "Zero Conditional", "First Conditional"], rows: [
+        ["Estructura", "If + presente, presente", "If + presente, will + base"],
+        ["Significado", "Siempre es verdad", "Futuro posible"],
+        ["Ejemplo", "If you touch fire, you get burned.", "If you touch it, you will get burned."]
+      ] },
+      { t: "bad", h: "Errores comunes", items: [
+        ["If it will rain, we will stay.", "If it rains, we will stay.", "No uses will después de if."],
+        ["If we won't take a taxi, we will be late.", "If we don't take a taxi, we will be late.", "La parte if niega con don't, no con won't."],
+        ["She will feels sick.", "She will feel sick.", "will + verbo base, sin -s."]
+      ] }
+    ]
+  },
+  {
+    id: "pron", lane: "base", name: "Pronombres personales y posesivos", short: "subject, object, possessive", page: "P2",
+    tl: null,
+    blocks: [
+      { t: "table", h: "La tabla completa", head: ["Subject", "Object", "Possessive Adjective", "Possessive Pronoun"], rows: [
+        ["I", "me", "my", "mine"],
+        ["You", "you", "your", "yours"],
+        ["He", "him", "his", "his"],
+        ["She", "her", "her", "hers"],
+        ["It", "it", "its", "its"],
+        ["We", "us", "our", "ours"],
+        ["You (plural)", "you", "your", "yours"],
+        ["They", "them", "their", "theirs"]
+      ] },
+      { t: "table", h: "Cuándo usar cada uno", head: ["Tipo", "Dónde va", "Ejemplo"], rows: [
+        ["Subject", "Antes del verbo (quien hace la acción)", "<b>They</b> are studying."],
+        ["Object", "Después de un verbo o una preposición", "Call <b>me</b>. I work with <b>her</b>."],
+        ["Possessive Adjective", "Antes de un sustantivo", "This is <b>my</b> car. <b>Their</b> new car is silver."],
+        ["Possessive Pronoun", "Reemplaza adjetivo + sustantivo; no lleva sustantivo después", "This car is <b>mine</b>. The house is <b>ours</b>."]
+      ] },
+      { t: "tip", text: "<b>its</b> (de él/ella para cosas o animales) no lleva apóstrofe. <b>it's</b> significa 'it is'. Ejemplo: <b>The cat is drinking its milk.</b>" },
+      { t: "ex", h: "Reglas útiles", items: [
+        ["Tom and I = we", "My parents = they"],
+        ["I wash my car → Anna washes her car", "Al pasar a 3ª persona cambia my por his (John) o her (Anna)."]
+      ] },
+      { t: "bad", h: "Errores comunes", items: [
+        ["This is not my car, it is her.", "This is not my car, it is hers.", "Al final y sin sustantivo va el pronombre posesivo."],
+        ["The teacher gave we homework.", "The teacher gave us homework.", "Después del verbo va object pronoun."],
+        ["Is that you new notebook?", "Is that your new notebook?", "Antes de un sustantivo va el adjetivo posesivo."]
+      ] }
+    ]
+  },
+  {
+    id: "verbs", lane: "base", name: "Verbos: pasado, participio y -ing", short: "la tabla de verbos del profe", page: "P6", tl: null,
+    blocks: [
+      { t: "use", h: "Las tres columnas del examen", items: [
+        "<b>Past Simple</b>: el verbo en pasado (worked, went, ate).",
+        "<b>Past Participle</b>: se usa con have/has (has worked, has gone, has eaten).",
+        "<b>Gerund (-ing)</b>: se usa con am/is/are y was/were (is working, was eating)."
+      ] },
+      { t: "tip", text: "<b>Los regulares</b> terminan en -ed en las dos columnas (worked, worked). <b>Los irregulares</b> hay que memorizarlos." },
+      { t: "verbs" },
+      { t: "bad", h: "Trampas clásicas", items: [
+        ["come → came → came", "come → came → come", "El participio de come vuelve a ser come."],
+        ["run → ran → ran", "run → ran → run", "El participio de run vuelve a ser run."],
+        ["write → wrote → writen", "write → wrote → written", "Con doble t en el participio."],
+        ["drink → drank → drank", "drink → drank → drunk", "drunk es el participio."],
+        ["write → writting", "write → writing", "En el gerundio solo una t."],
+        ["come → comming", "come → coming", "Quita la e y no dupliques la m."]
+      ] }
+    ]
+  }
+];
+
+const STUDY_ORDER = [];
+LANES.forEach(l => STUDY.filter(s => s.lane === l.id).forEach(s => STUDY_ORDER.push(s.id)));
+
+const STUDY_STATE = { current: STUDY_ORDER[0], allVerbs: false };
+
+function studyTimeline(tl) {
+  if (!tl) return "";
+  return `<div class="tl" aria-hidden="true">
+    <div class="tl-bar">
+      <i class="tl-seg${tl.fade ? " fade" : ""}" style="left:${tl.a}%;width:${tl.b - tl.a}%"></i>
+      ${tl.x ? `<i class="tl-x" style="left:${tl.x}%"></i>` : ""}
+      <b class="tl-now"></b>
+    </div>
+    <div class="tl-lab"><span>Pasado</span><span>Ahora</span><span>Futuro</span></div>
+  </div>
+  <p class="tl-cap">${tl.cap}</p>`;
+}
+
+function studyVerbsTable() {
+  const list = STUDY_STATE.allVerbs ? VERBS_60 : PROF_20_ORDER.map(i => VERB_MAP[i]);
+  const rows = list.map(v => `<tr><td><b>${v.inf}</b></td><td>${v.past.join(" / ")}</td><td>${v.part.join(" / ")}</td><td>${v.ger.join(" / ")}</td><td>${v.es}</td></tr>`).join("");
+  return `<h3>Tabla de verbos</h3>
+    <button type="button" class="chip-btn" id="stToggleVerbs">${STUDY_STATE.allVerbs ? "Mostrar solo los 20 del profe" : "Mostrar los 60 verbos"}</button>
+    <table class="st-table"><thead><tr><th>Infinitive</th><th>Past Simple</th><th>Past Participle</th><th>Gerund</th><th>Español</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function studyBlock(b) {
+  switch (b.t) {
+    case "use": return `<h3>${b.h}</h3><ul>${b.items.map(i => `<li>${i}</li>`).join("")}</ul>`;
+    case "form": return `<h3>${b.h}</h3><table class="st-table"><thead><tr><th>Tipo</th><th>Estructura</th><th>Ejemplo</th></tr></thead><tbody>${b.rows.map(r => `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table>`;
+    case "table": return `<h3>${b.h}</h3><table class="st-table"><thead><tr>${b.head.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${b.rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+    case "words": return `<h3>${b.h}</h3><div class="chips">${b.items.map(i => `<span class="chip"><b>${i[0]}</b> <i>${i[1]}</i></span>`).join("")}</div>`;
+    case "ex": return `<h3>${b.h}</h3><ul class="ex">${b.items.map(i => `<li>${i[0]}<i>${i[1]}</i></li>`).join("")}</ul>`;
+    case "bad": return `<h3>${b.h}</h3>${b.items.map(i => `<div class="bad-row"><span class="w">${i[0]}</span><span class="r">${i[1]}</span><span class="why">${i[2]}</span></div>`).join("")}`;
+    case "tip": return `<div class="tip">${b.text}</div>`;
+    case "verbs": return studyVerbsTable();
+    default: return "";
+  }
+}
+
+function renderStudyMap() {
+  const map = document.getElementById("stMap");
+  map.innerHTML = `<h2>Temario</h2>` + LANES.map(l => {
+    const items = STUDY.filter(s => s.lane === l.id);
+    return `<div class="lane">
+      <div class="lane-h"><b>${l.label}</b><span>${l.note}</span></div>
+      <div class="nodes">${items.map(s => `<button type="button" class="node${s.id === STUDY_STATE.current ? " active" : ""}" data-topic="${s.id}"><b>${s.name}</b><small>${s.short}</small></button>`).join("")}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderStudyDetail() {
+  const s = STUDY.find(x => x.id === STUDY_STATE.current);
+  const idx = STUDY_ORDER.indexOf(s.id);
+  const prev = STUDY_ORDER[idx - 1], next = STUDY_ORDER[idx + 1];
+  const nameOf = id => STUDY.find(x => x.id === id).name;
+  document.getElementById("stDetail").innerHTML = `
+    <h1>${s.name}</h1>
+    <p class="sub">${s.short}</p>
+    ${studyTimeline(s.tl)}
+    ${s.blocks.map(studyBlock).join("")}
+    <div class="st-actions">
+      <button type="button" class="st-btn main" data-practice="${s.page}">Practicar este tema en el examen</button>
+      ${prev ? `<button type="button" class="st-btn" data-topic="${prev}">Anterior: ${nameOf(prev)}</button>` : ""}
+      ${next ? `<button type="button" class="st-btn" data-topic="${next}">Siguiente: ${nameOf(next)}</button>` : ""}
+    </div>`;
+}
+
+function openTopic(id, scroll) {
+  STUDY_STATE.current = id;
+  renderStudyMap();
+  renderStudyDetail();
+  if (scroll) {
+    const d = document.getElementById("stDetail");
+    const top = d.getBoundingClientRect().top + window.scrollY - (parseInt(getComputedStyle(document.documentElement).getPropertyValue("--tb")) || 112) - 14;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  }
+}
+
+// =========================================================================
+// CAMBIO DE VISTA, ENTER PARA AVANZAR, NOMBRE EDITABLE
+// =========================================================================
+function showView(view) {
+  const study = view === "study";
+  document.getElementById("exam").classList.toggle("hidden", study);
+  document.getElementById("study").classList.toggle("hidden", !study);
+  document.getElementById("examTools").style.display = study ? "none" : "";
+  document.getElementById("tabExam").classList.toggle("active", !study);
+  document.getElementById("tabStudy").classList.toggle("active", study);
+  syncToolbarHeight();
+  if (!study && PAG.dirty) paginate();
+  window.scrollTo({ top: 0 });
+}
+
+function syncToolbarHeight() {
+  const tb = document.getElementById("toolbar");
+  if (tb) document.documentElement.style.setProperty("--tb", tb.offsetHeight + "px");
+}
+
+function visibleBlanks() {
+  return [...document.querySelectorAll("#exam input.blank")].filter(i => i.offsetParent !== null);
+}
+
+function goToBlank(from, next) {
+  const secFrom = from ? from.closest(".sec") : null;
+  const secTo = next.closest(".sec");
+  if (secTo && secTo !== secFrom) {
+    secTo.scrollIntoView({ behavior: "smooth", block: "start" });
+    secTo.classList.add("flash");
+    setTimeout(() => secTo.classList.remove("flash"), 900);
+    next.focus({ preventScroll: true });
+    return;
+  }
+  next.focus({ preventScroll: true });
+  const bar = document.getElementById("toolbar").offsetHeight;
+  const r = next.getBoundingClientRect();
+  if (r.top < bar + 60 || r.bottom > window.innerHeight - 60) {
+    window.scrollTo({ top: window.scrollY + r.top - window.innerHeight / 2, behavior: "smooth" });
+  }
+}
+
+function sizeNameInput(el) {
+  el.style.width = Math.max(14, el.value.length + 1) + "ch";
+}
+
+function setupExtras() {
+  // Pestañas
+  document.getElementById("tabExam").addEventListener("click", () => showView("exam"));
+  document.getElementById("tabStudy").addEventListener("click", () => showView("study"));
+
+  // Selector de verbos
+  const vm = document.getElementById("verbMode");
+  vm.value = STATE.verbMode;
+  vm.addEventListener("change", e => {
+    STATE.verbMode = e.target.value;
+    renderVerbSection();
+    toast(STATE.verbMode === "prof20"
+      ? "Tabla de verbos: los 20 verbos del profe en su orden."
+      : "Tabla de verbos: 20 verbos al azar del banco de 60.");
+  });
+
+  // Nombre editable
+  const nm = document.getElementById("studentName");
+  try {
+    const saved = localStorage.getItem("examStudentName");
+    if (saved) nm.value = saved;
+  } catch (err) { /* sin almacenamiento */ }
+  sizeNameInput(nm);
+  nm.addEventListener("input", () => {
+    sizeNameInput(nm);
+    try { localStorage.setItem("examStudentName", nm.value); } catch (err) { /* ignorar */ }
+  });
+  nm.addEventListener("focus", () => nm.select());
+
+  // Enter avanza al siguiente campo (Shift+Enter retrocede)
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Enter") return;
+    const t = e.target;
+    if (t && t.id === "studentName") {
+      e.preventDefault();
+      const first = visibleBlanks()[0];
+      if (first) goToBlank(null, first);
+      return;
+    }
+    if (!(t && t.matches && t.matches("#exam input.blank"))) return;
+    e.preventDefault();
+    const list = visibleBlanks();
+    const i = list.indexOf(t);
+    const next = list[e.shiftKey ? i - 1 : i + 1];
+    if (next) {
+      goToBlank(t, next);
+    } else if (!e.shiftKey) {
+      t.blur();
+      toast("Llegaste al final. Pulsa Calificar cuando termines.");
+    }
+  });
+
+  // Mapa de estudio
+  renderStudyMap();
+  renderStudyDetail();
+  document.getElementById("study").addEventListener("click", e => {
+    const topic = e.target.closest("[data-topic]");
+    if (topic) { openTopic(topic.getAttribute("data-topic"), topic.classList.contains("st-btn")); return; }
+    const prac = e.target.closest("[data-practice]");
+    if (prac) {
+      const val = prac.getAttribute("data-practice");
+      const sel = document.getElementById("filter");
+      sel.value = val;
+      showView("exam");
+      applyFilter(val);
+      return;
+    }
+    if (e.target.closest("#stToggleVerbs")) {
+      STUDY_STATE.allVerbs = !STUDY_STATE.allVerbs;
+      renderStudyDetail();
+    }
+  });
+
+  window.addEventListener("resize", syncToolbarHeight);
+  syncToolbarHeight();
+}
+
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
